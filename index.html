@@ -12,12 +12,19 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
         :root { --bordo: #B22222; --bg: #050505; }
         body { background-color: var(--bg); color: #F4F4F5; font-family: 'Inter', sans-serif; margin: 0; }
-        .btn-bordo { background: linear-gradient(135deg, var(--bordo), #7A1B1B); transition: 0.3s; }
+        .btn-bordo { background: linear-gradient(135deg, var(--bordo), #7A1B1B); transition: 0.3s; color: white; font-weight: 800; }
         .glass { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
-        .nav-link { font-family: 'Plus Jakarta Sans'; font-size: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; padding: 20px; color: #71717A; }
+        .nav-link { font-family: 'Plus Jakarta Sans'; font-size: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; padding: 25px 15px; color: #71717A; border-bottom: 3px solid transparent; }
         .nav-link.active { color: white; border-bottom: 3px solid var(--bordo); }
+        .slide-title { font-family: 'Plus Jakarta Sans'; font-weight: 800; text-transform: uppercase; border-left: 8px solid var(--bordo); padding-left: 20px; font-size: 28px; letter-spacing: -1px; }
+        .tile { background: #0A0A0A; border: 1px solid #1A1A1A; border-radius: 20px; padding: 25px; transition: 0.3s; }
+        .tile:hover { border-color: var(--bordo); }
+        .editable { cursor: pointer; padding: 2px 5px; border-radius: 4px; }
+        .editable:hover { background: rgba(178, 34, 34, 0.1); }
         .hidden { display: none !important; }
-        .slide-title { font-family: 'Plus Jakarta Sans'; font-weight: 800; text-transform: uppercase; border-left: 8px solid var(--bordo); padding-left: 20px; font-size: 32px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: rgba(178, 34, 34, 0.05); color: var(--bordo); font-size: 10px; text-transform: uppercase; padding: 15px; text-align: left; }
+        td { border-bottom: 1px solid #1A1A1A; padding: 15px; font-size: 13px; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -26,34 +33,35 @@
         <div class="glass p-10 rounded-3xl w-full max-w-md text-center">
             <div class="w-16 h-16 bg-[#B22222] rounded-2xl flex items-center justify-center mx-auto mb-8 font-black italic text-2xl text-white shadow-xl shadow-red-900/40">V</div>
             <h1 class="text-2xl font-black uppercase tracking-tighter mb-8">Vibz Command</h1>
-            <div class="space-y-4">
-                <input type="email" id="email" placeholder="Email pro" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-red-800 text-sm">
-                <input type="password" id="password" placeholder="Mot de passe" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-red-800 text-sm">
-                <button onclick="login()" class="btn-bordo w-full p-4 rounded-xl font-black uppercase text-xs tracking-widest mt-4 text-white">Connexion</button>
-            </div>
+            <input type="email" id="email" placeholder="Email professionnel" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl mb-4 outline-none focus:border-red-800 text-sm">
+            <input type="password" id="password" placeholder="Mot de passe" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl mb-6 outline-none focus:border-red-800 text-sm">
+            <button onclick="login()" class="btn-bordo w-full p-4 rounded-xl text-xs tracking-widest uppercase shadow-lg">Entrer dans le Boardroom</button>
             <p id="login-error" class="text-red-500 text-[10px] mt-4 font-bold uppercase"></p>
         </div>
     </div>
 
     <div id="main-app" class="hidden flex flex-col min-h-screen">
-        <nav class="glass flex items-center justify-between px-8 sticky top-0 z-50">
-            <div class="flex items-center gap-3">
-                <div class="w-6 h-6 bg-red-800 rounded flex items-center justify-center font-black text-[10px] italic text-white">V</div>
-                <span id="user-display" class="text-[9px] font-black uppercase tracking-widest text-stone-500">Boardroom</span>
+        <nav class="glass flex items-center justify-between px-6 sticky top-0 z-50">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-red-800 rounded flex items-center justify-center font-black text-[10px] italic text-white shadow-md">V</div>
+                <span id="user-display" class="text-[9px] font-black uppercase tracking-widest text-stone-500 italic">Boardroom</span>
             </div>
-            <div class="flex">
+            <div class="flex overflow-x-auto no-scrollbar">
                 <div class="nav-link active" onclick="loadPage('dash', this)">Stratégie</div>
+                <div class="nav-link" onclick="loadPage('staff', this)">Staff</div>
+                <div class="nav-link" onclick="loadPage('finance', this)">Finances</div>
+                <div class="nav-link" onclick="loadPage('tournee', this)">Tournée</div>
                 <div class="nav-link" onclick="loadPage('chat', this)">Chat</div>
-                <div class="nav-link text-red-500" onclick="logout()">Logout</div>
             </div>
+            <button onclick="logout()" class="text-[9px] font-black text-red-700 uppercase hover:text-white transition">Sortir</button>
         </nav>
 
-        <main id="content" class="p-8 max-w-5xl mx-auto w-full">
+        <main id="content" class="p-6 max-w-6xl mx-auto w-full">
             </main>
     </div>
 
     <script>
-        // CONFIGURATION FIREBASE AVEC TES CLÉS
+        // CONFIGURATION FIREBASE PERSONNELLE
         const firebaseConfig = {
             apiKey: "AIzaSyAyJ8tc-razxpr6x8Yp-dHLbkhhcln5O20",
             authDomain: "vibz-lab-command-center.firebaseapp.com",
@@ -68,21 +76,21 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
-        // Fonctions Auth
         function login() {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
-            auth.signInWithEmailAndPassword(e, p).catch(err => {
-                document.getElementById('login-error').innerText = "Accès refusé";
+            auth.signInWithEmailAndPassword(e, p).catch(err => { 
+                document.getElementById('login-error').innerText = "Accès refusé : Identifiants incorrects"; 
             });
         }
+
         function logout() { auth.signOut(); }
 
         auth.onAuthStateChanged(user => {
             if (user) {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-app').classList.remove('hidden');
-                document.getElementById('user-display').innerText = user.email.split('@')[0];
+                document.getElementById('user-display').innerText = user.email.split('@')[0].toUpperCase();
                 loadPage('dash');
             } else {
                 document.getElementById('login-screen').classList.remove('hidden');
@@ -91,69 +99,136 @@
         });
 
         function loadPage(page, el) {
-            if(el) {
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                el.classList.add('active');
+            if(el) { 
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); 
+                el.classList.add('active'); 
             }
             const c = document.getElementById('content');
             
             if(page === 'dash') {
                 c.innerHTML = `
                 <div class="animate-fade">
-                    <h2 class="slide-title mb-12">Projections & <span class="text-red-700">Performance</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                        <div class="glass p-8 rounded-3xl border-l-4 border-red-800">
-                            <h3 class="text-xs font-bold text-stone-500 uppercase mb-4">ROI Prévu Q4</h3>
-                            <p class="text-4xl font-black italic">+52%</p>
+                    <h2 class="slide-title mb-10">Projections & <span class="text-red-700">Performance</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="tile"><h3>Trésorerie Actuelle</h3><p class="text-2xl font-black mt-2 text-red-700">4.250.000 F</p></div>
+                        <div class="tile"><h3>ROI Prévu (Q4)</h3><p class="text-2xl font-black mt-2">+52.4%</p></div>
+                        <div class="tile"><h3>Capacité Production</h3><p class="text-2xl font-black mt-2 text-green-600">OPTIMAL</p></div>
+                    </div>
+                    <div class="tile">
+                         <h3 class="text-[10px] font-black uppercase text-stone-500 mb-6 italic tracking-widest">Courbe de Croissance Stratégique</h3>
+                         <svg viewBox="0 0 1000 150" class="w-full h-32">
+                            <polyline fill="none" stroke="#B22222" stroke-width="4" points="0,140 250,110 500,80 750,30 1000,5" />
+                            <circle cx="1000" cy="5" r="5" fill="#B22222" />
+                         </svg>
+                    </div>
+                </div>`;
+            }
+
+            if(page === 'staff') {
+                c.innerHTML = `
+                <div class="animate-fade">
+                    <h2 class="slide-title mb-10">Gestion du <span class="text-red-700">Staff</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="tile">
+                            <h3 class="text-xs font-black text-stone-600 uppercase mb-4 italic">Les 7 Postes Clés</h3>
+                            ${['CEO / Stratégie', 'Direction Artistique', 'Responsable Technique', 'Chef de Montage', 'Logistique Terrain', 'Gestion Comptable', 'Assistante Exécutive'].map(r => `
+                                <div class="flex justify-between items-center py-4 border-b border-white/5">
+                                    <span class="text-[9px] font-black uppercase text-red-800 tracking-tighter">${r}</span>
+                                    <span class="text-sm font-bold editable outline-none" contenteditable="true">Nom Membre</span>
+                                </div>
+                            `).join('')}
                         </div>
-                        <div class="glass p-8 rounded-3xl">
-                            <h3 class="text-xs font-bold text-stone-500 uppercase mb-4">Missions Staff</h3>
-                            <p class="text-sm font-medium text-stone-400">7 membres actifs en session.</p>
+                        <div class="tile">
+                            <h3 class="text-xs font-black text-stone-600 uppercase mb-4 italic">Notes de service</h3>
+                            <textarea class="w-full h-64 bg-white/5 border border-white/10 p-4 rounded-xl text-xs outline-none italic text-stone-400" placeholder="Entrez les directives du jour..."></textarea>
                         </div>
                     </div>
-                    <div class="glass p-8 rounded-3xl">
-                         <h3 class="text-[10px] font-black uppercase text-stone-500 mb-8 italic">Croissance Vibz Lab</h3>
-                         <svg viewBox="0 0 1000 200" class="w-full h-32"><polyline fill="none" stroke="#B22222" stroke-width="4" points="0,180 250,150 500,100 750,40 1000,10" /></svg>
+                </div>`;
+            }
+
+            if(page === 'finance') {
+                c.innerHTML = `
+                <div class="animate-fade">
+                    <h2 class="slide-title mb-10">Finances <span class="text-red-700">CRUD</span></h2>
+                    <div class="tile p-0 overflow-hidden">
+                        <table>
+                            <thead><tr><th>Poste Budgétaire</th><th>Budget Prévu</th><th>Réel</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr><td>Logistique Tournée</td><td contenteditable="true" class="outline-none">4.500.000 F</td><td class="text-red-600 font-bold">---</td><td class="text-[10px] font-black text-blue-500 uppercase">En cours</td></tr>
+                                <tr><td>Matériel Production</td><td contenteditable="true" class="outline-none">1.200.000 F</td><td class="text-green-600 font-bold">1.150.000 F</td><td class="text-[10px] font-black text-green-500 uppercase">Clos</td></tr>
+                                <tr><td>Rémunération Staff</td><td contenteditable="true" class="outline-none">2.800.000 F</td><td class="text-red-600 font-bold">---</td><td class="text-[10px] font-black text-stone-500 uppercase">Prévu</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
+            }
+
+            if(page === 'tournee') {
+                c.innerHTML = `
+                <div class="animate-fade">
+                    <h2 class="slide-title mb-10">Flux <span class="text-red-700">Logistique</span></h2>
+                    <div class="flex justify-between mt-20 relative px-4">
+                        <div class="absolute w-[95%] h-[2px] bg-white/5 top-[10px] left-1/2 -translate-x-1/2"></div>
+                        ${['Sotouboua', 'Sokodé', 'Kara', 'Mango', 'Dapaong'].map(v => `
+                            <div class="z-10 text-center">
+                                <div class="w-4 h-4 bg-red-700 rounded-full mx-auto mb-3 border-2 border-black shadow-[0_0_10px_rgba(178,34,34,0.5)]"></div>
+                                <p class="text-[10px] font-black uppercase italic tracking-tighter">${v}</p>
+                                <p class="text-[8px] text-stone-600 font-bold uppercase mt-1">Prêt</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="mt-16 tile text-center border-dashed">
+                        <p class="text-stone-500 italic text-sm">Gestion des autorisations préfectorales et accès sites en cours.</p>
                     </div>
                 </div>`;
             }
 
             if(page === 'chat') {
                 c.innerHTML = `
-                <h2 class="slide-title mb-8">Boardroom <span class="text-red-700">Chat</span></h2>
-                <div class="glass rounded-3xl h-[60vh] flex flex-col overflow-hidden">
+                <h2 class="slide-title mb-8 italic">Boardroom <span class="text-red-700">Direct</span></h2>
+                <div class="glass rounded-3xl h-[60vh] flex flex-col overflow-hidden border border-white/5">
                     <div id="c-box" class="flex-grow p-6 overflow-y-auto space-y-4"></div>
-                    <div class="p-4 bg-black/50 border-t border-white/5 flex gap-2">
-                        <input type="text" id="c-in" placeholder="Directive..." class="flex-grow bg-white/5 border border-white/10 p-4 rounded-xl text-sm outline-none italic">
-                        <button onclick="send()" class="btn-bordo px-8 rounded-xl font-black text-[10px] uppercase text-white">Envoyer</button>
+                    <div class="p-4 bg-black/40 border-t border-white/5 flex gap-2">
+                        <input type="text" id="c-in" onkeypress="handleKey(event)" placeholder="Tapez votre message..." class="flex-grow bg-white/5 border border-white/10 p-3 rounded-xl text-sm outline-none text-white italic">
+                        <button onclick="send()" class="btn-bordo px-6 rounded-xl text-[10px] uppercase shadow-md active:scale-95 transition">OK</button>
                     </div>
                 </div>`;
                 syncChat();
             }
         }
 
+        // --- FONCTIONS LOGIQUES ---
+
+        function handleKey(e) { if(e.key === "Enter") send(); }
+
         function send() {
             const input = document.getElementById('c-in');
-            if(!input.value) return;
+            if(!input.value || !auth.currentUser) return;
+            
             db.ref('boardroom_chat').push({ 
-                u: auth.currentUser.email.split('@')[0], 
+                u: auth.currentUser.email.split('@')[0].toUpperCase(), 
                 m: input.value, 
-                t: Date.now() 
+                t: firebase.database.ServerValue.TIMESTAMP 
+            }).then(() => {
+                input.value = "";
+            }).catch(err => {
+                alert("Erreur: Vérifiez vos règles Firebase Database.");
             });
-            input.value = "";
         }
 
         function syncChat() {
             db.ref('boardroom_chat').limitToLast(20).on('value', s => {
                 const box = document.getElementById('c-box');
+                if(!box) return;
                 box.innerHTML = "";
-                if(s.val()){
-                    Object.values(s.val()).forEach(m => {
-                        const isMe = m.u === auth.currentUser.email.split('@')[0];
+                const data = s.val();
+                if(data){
+                    Object.values(data).forEach(m => {
+                        const isMe = m.u === auth.currentUser.email.split('@')[0].toUpperCase();
                         box.innerHTML += `
-                        <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
-                            <span class="text-[8px] font-black uppercase text-stone-600 mb-1">${m.u}</span>
-                            <div class="p-4 rounded-2xl text-xs ${isMe ? 'bg-red-900/20 text-white border border-red-900/30 italic' : 'bg-white/5 text-stone-400'} max-w-sm">
+                        <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} mb-2">
+                            <span class="text-[7px] font-black uppercase text-stone-600 mb-1">${m.u}</span>
+                            <div class="p-3 rounded-2xl text-xs ${isMe ? 'bg-red-900/30 text-white border border-red-900/40 italic' : 'bg-white/5 text-stone-400 border border-white/10'} max-w-[85%] shadow-sm">
                                 ${m.m}
                             </div>
                         </div>`;
