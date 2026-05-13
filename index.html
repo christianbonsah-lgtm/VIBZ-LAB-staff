@@ -3,118 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIBZ COMMAND CENTER | Interne</title>
+    <title>COMMAND CENTER | VIBZ LAB</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { background-color: #0a0a0a; color: #e5e5e5; font-family: 'Inter', sans-serif; overflow: hidden; }
-        .sidebar { width: 260px; background: #000; border-right: 1px solid #1f1f1f; height: 100vh; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap');
+        body { background-color: #080808; color: #d4d4d4; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
+        
+        .sidebar { width: 280px; background: #000; border-right: 1px solid #1a1a1a; }
         .accent-bordo { color: #B22222; }
         .bg-bordo { background-color: #B22222; }
-        .tool-card { background: rgba(255,255,255,0.03); border: 1px solid #1f1f1f; border-radius: 8px; transition: 0.3s; }
-        .tool-card:hover { border-color: #B22222; background: rgba(178,34,34,0.05); }
-        .nav-item { padding: 12px 24px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600; color: #737373; }
-        .nav-item:hover, .nav-item.active { color: white; background: rgba(255,255,255,0.05); border-left: 3px solid #B22222; }
+        
+        .module-card { background: #111; border: 1px solid #1a1a1a; transition: 0.3s; }
+        .module-card:hover { border-color: #B22222; transform: translateY(-2px); }
+        
+        .nav-link { padding: 14px 24px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #525252; transition: 0.2s; }
+        .nav-link:hover, .nav-link.active { color: white; background: #111; border-left: 4px solid #B22222; }
+
+        .chat-bubble { background: #1a1a1a; border-radius: 12px; padding: 12px; font-size: 13px; max-width: 80%; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
     </style>
 </head>
 <body class="flex">
 
-    <aside class="sidebar flex flex-col justify-between py-8">
-        <div>
-            <div class="px-8 mb-10 flex items-center gap-3">
-                <div class="bg-bordo text-white font-black italic px-2 rounded">VL</div>
-                <h1 class="text-xs font-black uppercase tracking-widest">Command Center</h1>
+    <aside class="sidebar flex flex-col">
+        <div class="p-8">
+            <div class="flex items-center gap-3 mb-12">
+                <div class="bg-bordo text-white font-black italic px-2 py-1 rounded text-lg">VL</div>
+                <span class="font-black text-xs uppercase tracking-[0.3em]">Command Center</span>
             </div>
-            
-            <nav>
-                <div class="nav-item active" onclick="loadModule('dash')">📊 Dashboard Global</div>
-                <div class="nav-item" onclick="loadModule('admin')">💼 Administration</div>
-                <div class="nav-item" onclick="loadModule('crea')">🎨 Direction Artistique</div>
-                <div class="nav-item" onclick="loadModule('tech')">⚙️ Technique & Flux</div>
-                <div class="nav-item" onclick="loadModule('reunion')">💬 Salle de Réunion</div>
+
+            <nav class="space-y-2">
+                <div class="nav-link active" onclick="loadModule('dash')">🏠 Tableau de Bord</div>
+                <div class="nav-link" onclick="loadModule('tasks')">📋 Missions / Kanban</div>
+                <div class="nav-link" onclick="loadModule('chat')">💬 Salle de Réunion</div>
+                <div class="nav-link" onclick="loadModule('finance')">💰 Trésorerie & RH</div>
+                <div class="nav-link" onclick="loadModule('files')">📂 Serveur Médias</div>
             </nav>
         </div>
 
-        <div class="px-8 border-t border-white/5 pt-6">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-stone-800 border border-bordo"></div>
-                <div class="text-[10px]">
-                    <p class="font-bold text-white uppercase">C. Bonsah</p>
-                    <p class="accent-bordo uppercase">Administrateur</p>
+        <div class="mt-auto p-6 border-t border-white/5 bg-[#050505]">
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <div class="w-10 h-10 rounded-lg bg-stone-800 border border-red-900/30 flex items-center justify-center font-bold text-white">CB</div>
+                    <div class="status-dot absolute -bottom-1 -right-1 border-2 border-black"></div>
+                </div>
+                <div>
+                    <p class="text-[11px] font-black uppercase text-white">Christian B.</p>
+                    <p class="text-[9px] font-bold text-red-700 uppercase">Administrateur</p>
                 </div>
             </div>
         </div>
     </aside>
 
-    <main class="flex-grow p-10 overflow-y-auto" id="app-space">
-        </main>
+    <main class="flex-grow flex flex-col">
+        <header class="h-20 border-b border-white/5 flex items-center justify-between px-10 bg-[#080808]/80 backdrop-blur-md">
+            <h2 id="module-title" class="text-xl font-black italic uppercase tracking-tighter">Tableau de Bord</h2>
+            <div class="flex items-center gap-6">
+                <span class="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Mardi 12 Mai 2026</span>
+                <button class="bg-white/5 p-2 rounded-full hover:bg-white/10 transition">🔔</button>
+            </div>
+        </header>
+
+        <section id="content-area" class="p-10 overflow-y-auto">
+            </section>
+    </main>
 
     <script>
         function loadModule(name) {
-            const space = document.getElementById('app-space');
+            const area = document.getElementById('content-area');
+            const title = document.getElementById('module-title');
             
-            // Mise à jour visuelle menu
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            // Gestion de l'état actif menu
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
             event.currentTarget.classList.add('active');
 
             if(name === 'dash') {
-                space.innerHTML = `
-                    <h2 class="text-3xl font-black mb-8 italic uppercase accent-bordo">État de l'Entreprise</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="tool-card p-6">
-                            <p class="text-zinc-500 text-[10px] uppercase font-black mb-2">Trésorerie</p>
-                            <h3 class="text-2xl font-black">--- FCFA</h3>
-                        </div>
-                        <div class="tool-card p-6 border-l-4 border-green-600">
-                            <p class="text-zinc-500 text-[10px] uppercase font-black mb-2">Projets Actifs</p>
-                            <h3 class="text-2xl font-black">12</h3>
-                        </div>
-                        <div class="tool-card p-6">
-                            <p class="text-zinc-500 text-[10px] uppercase font-black mb-2">Personnel présent</p>
-                            <h3 class="text-2xl font-black">7 / 7</h3>
+                title.innerText = "Tableau de Bord Global";
+                area.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                        <div class="module-card p-6 rounded-xl"><p class="text-[10px] uppercase font-bold text-stone-500 mb-2">Chiffre d'Affaires Mai</p><h3 class="text-2xl font-black text-white">1.250.000 <span class="text-xs text-stone-600">FCFA</span></h3></div>
+                        <div class="module-card p-6 rounded-xl border-l-4 border-red-800"><p class="text-[10px] uppercase font-bold text-stone-500 mb-2">Tournée (Postulants)</p><h3 class="text-2xl font-black text-white">48 Artistes</h3></div>
+                        <div class="module-card p-6 rounded-xl"><p class="text-[10px] uppercase font-bold text-stone-500 mb-2">Sessions Studio</p><h3 class="text-2xl font-black text-white">14 Réservées</h3></div>
+                        <div class="module-card p-6 rounded-xl"><p class="text-[10px] uppercase font-bold text-stone-500 mb-2">Équipe active</p><h3 class="text-2xl font-black text-white">7 Membres</h3></div>
+                    </div>
+                    <h3 class="text-xs font-black uppercase mb-6 tracking-widest text-stone-500">Alertes Récentes</h3>
+                    <div class="space-y-3">
+                        <div class="bg-white/5 p-4 rounded flex items-center justify-between border border-white/5">
+                            <span class="text-sm font-semibold italic text-white underline">Nouveau message de la Direction Artistique</span>
+                            <span class="text-[10px] text-stone-500 uppercase">Il y a 10 min</span>
                         </div>
                     </div>
                 `;
             }
 
-            if(name === 'reunion') {
-                space.innerHTML = `
-                    <div class="h-full flex flex-col">
-                        <h2 class="text-3xl font-black mb-8 italic uppercase accent-bordo">Salle de Réunion</h2>
-                        <div class="flex-grow glass rounded-xl border border-white/5 p-6 mb-4 overflow-y-auto bg-stone-900/30">
+            if(name === 'tasks') {
+                title.innerText = "Missions & Production";
+                area.innerHTML = `
+                    <div class="flex gap-6 h-full">
+                        <div class="flex-1">
+                            <h4 class="text-[10px] font-black uppercase mb-4 text-stone-500">À Faire (Postes)</h4>
                             <div class="space-y-4">
-                                <div class="flex gap-4">
-                                    <div class="w-8 h-8 bg-zinc-800 rounded"></div>
-                                    <div class="bg-zinc-800/50 p-3 rounded-lg text-xs max-w-md">Bonjour l'équipe, on fait le point sur la tournée Kara ?</div>
+                                <div class="module-card p-4 rounded-lg">
+                                    <span class="text-[8px] bg-blue-900/30 text-blue-400 px-2 py-1 rounded mb-2 inline-block font-black">TECHNIQUE</span>
+                                    <p class="text-sm font-bold text-white mb-2">Nettoyage capteurs caméras iPhone 13</p>
+                                    <p class="text-[10px] text-stone-500">Assigné à : Kokou</p>
+                                </div>
+                                <div class="module-card p-4 rounded-lg">
+                                    <span class="text-[8px] bg-purple-900/30 text-purple-400 px-2 py-1 rounded mb-2 inline-block font-black">ARTISTIQUE</span>
+                                    <p class="text-sm font-bold text-white mb-2">Validation des logos Cartel Zone</p>
+                                    <p class="text-[10px] text-stone-500">Assigné à : Direction</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex gap-4">
-                            <input type="text" placeholder="Écrire à l'équipe..." class="flex-grow bg-white/5 border border-white/10 p-4 rounded-lg outline-none focus:border-bordo transition text-sm">
-                            <button class="bg-bordo px-8 rounded-lg font-black uppercase text-xs">Envoyer</button>
+                        <div class="flex-1 bg-white/5 p-4 rounded-xl">
+                            <h4 class="text-[10px] font-black uppercase mb-4 text-stone-500 italic">En Cours de Montage</h4>
+                            <div class="text-center py-20 text-stone-600 italic text-xs">Aucun rendu en cours...</div>
                         </div>
                     </div>
                 `;
             }
 
-            if(name === 'admin') {
-                space.innerHTML = `
-                    <h2 class="text-3xl font-black mb-8 italic uppercase accent-bordo">Gestion Administrative</h2>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="tool-card p-6 flex justify-between items-center">
-                            <span>📄 Générer une facture</span>
-                            <button class="bg-white/5 p-2 rounded px-4 text-[10px] uppercase font-bold italic">Ouvrir</button>
+            if(name === 'chat') {
+                title.innerText = "Salle de Réunion Virtuelle";
+                area.innerHTML = `
+                    <div class="flex flex-col h-[70vh]">
+                        <div class="flex-grow space-y-6 mb-6 overflow-y-auto pr-4">
+                            <div class="flex flex-col items-start">
+                                <span class="text-[9px] font-bold mb-1 uppercase text-stone-500">Assistante Exécutive</span>
+                                <div class="chat-bubble border border-white/5">Le planning pour Sokodé est prêt. On valide les hôtels ?</div>
+                            </div>
+                            <div class="flex flex-col items-end">
+                                <span class="text-[9px] font-bold mb-1 uppercase accent-bordo text-right">Moi (Admin)</span>
+                                <div class="chat-bubble bg-red-900/20 border border-red-900/30 text-white italic">Attends le retour du Tech sur l'état du groupe électrogène.</div>
+                            </div>
                         </div>
-                        <div class="tool-card p-6 flex justify-between items-center">
-                            <span>📅 Planning Global Studio</span>
-                            <button class="bg-white/5 p-2 rounded px-4 text-[10px] uppercase font-bold italic">Gérer</button>
+                        <div class="flex gap-4">
+                            <input type="text" placeholder="Discuter avec l'équipe..." class="flex-grow bg-white/5 border border-white/10 p-5 rounded-xl outline-none focus:border-bordo transition text-sm italic">
+                            <button class="bg-bordo text-white px-10 rounded-xl font-black uppercase text-xs tracking-widest shadow-xl shadow-red-900/20">Envoyer</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if(name === 'finance') {
+                title.innerText = "Gestion Administrative & RH";
+                area.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div class="module-card p-10 rounded-2xl">
+                            <h4 class="text-xs font-black uppercase mb-8 accent-bordo">Ressources Humaines</h4>
+                            <div class="space-y-6">
+                                ${['C. Bonsah (CEO)', 'Assistante Ex.', 'Dir. Artistique', 'Tech Vidéo', 'Monteur', 'Comptable', 'Logistique'].map(staff => `
+                                    <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                                        <span class="text-sm font-bold text-white">${staff}</span>
+                                        <span class="text-[10px] text-green-500 font-bold uppercase italic">Présent</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="module-card p-10 rounded-2xl bg-gradient-to-br from-[#111] to-[#000]">
+                            <h4 class="text-xs font-black uppercase mb-8">Outils Comptabilité</h4>
+                            <div class="grid grid-cols-1 gap-4">
+                                <button class="w-full py-4 border border-white/10 rounded-lg text-xs font-black uppercase hover:bg-white hover:text-black transition tracking-widest">Générer Fiche de Paie</button>
+                                <button class="w-full py-4 border border-white/10 rounded-lg text-xs font-black uppercase hover:bg-white hover:text-black transition tracking-widest">Enregistrer une Dépense</button>
+                                <button class="w-full py-4 bg-white/5 text-stone-500 rounded-lg text-[9px] font-black uppercase tracking-widest cursor-not-allowed italic">Bilan Trimestriel (Dév en cours)</button>
+                            </div>
                         </div>
                     </div>
                 `;
             }
         }
 
-        // Chargement par défaut
+        // Chargement automatique du Dashboard
         loadModule('dash');
     </script>
 </body>
