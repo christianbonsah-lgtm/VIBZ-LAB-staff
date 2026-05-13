@@ -3,116 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIBZ COMMAND | Executive Boardroom</title>
+    <title>VIBZ LAB | Executive Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
         
-        :root { --bordo: #B22222; --bg: #050505; }
+        :root { --bordo: #B22222; --accent-red: #8B0000; }
 
         body { 
-            background-color: var(--bg);
-            /* Intégration du design sombre en arrière-plan */
-            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://raw.githubusercontent.com/votre-repo/image/fond-vibz.jpg');
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2069'); /* Image de bureau sombre type boardroom */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: #F4F4F5; 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; 
+            color: #E4E4E7; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        .glass { 
-            background: rgba(15, 15, 15, 0.7); 
-            backdrop-filter: blur(15px); 
-            border: 1px solid rgba(255,255,255,0.08); 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        .glass-main {
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
         }
 
-        .nav-link { 
-            font-family: 'Plus Jakarta Sans'; 
-            font-size: 9px; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            padding: 25px 15px; 
-            color: #a1a1aa; 
+        .sidebar-item {
+            transition: 0.2s;
+            border-radius: 12px;
+            margin-bottom: 4px;
+        }
+        .sidebar-item:hover { background: rgba(255,255,255,0.05); }
+        .sidebar-item.active { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); }
+
+        .chat-bubble-me {
+            background: rgba(178, 34, 34, 0.25);
+            border-left: 4px solid var(--bordo);
+            border-radius: 12px;
+        }
+
+        .chat-bubble-other {
+            background: rgba(40, 40, 40, 0.4);
+            border-radius: 12px;
+        }
+
+        .nav-top-link {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #71717A;
             transition: 0.3s;
+            letter-spacing: 0.5px;
         }
+        .nav-top-link:hover, .nav-top-link.active { color: white; }
 
-        .nav-link.active { color: white; border-bottom: 3px solid var(--bordo); }
-
-        .btn-bordo { 
-            background: linear-gradient(135deg, var(--bordo), #7A1B1B); 
-            color: white; 
-            font-weight: 800; 
-            box-shadow: 0 4px 15px rgba(178, 34, 34, 0.3);
-        }
-
-        .tile { 
-            background: rgba(20, 20, 20, 0.6); 
-            border: 1px solid rgba(255,255,255,0.05); 
-            border-radius: 24px; 
-            padding: 25px; 
-        }
-
-        .editable { cursor: pointer; border-bottom: 1px dashed transparent; }
-        .editable:hover { border-bottom-color: var(--bordo); background: rgba(255,255,255,0.03); }
-
-        /* Animation d'entrée */
-        .animate-fade { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        input::placeholder { color: #52525B; }
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body>
+<body class="flex flex-col">
 
-    <div id="login-screen" class="flex items-center justify-center min-h-screen px-6">
-        <div class="glass p-12 rounded-[40px] w-full max-w-md text-center border border-white/10">
-            <div class="w-20 h-20 bg-[#B22222] rounded-3xl flex items-center justify-center mx-auto mb-8 font-black italic text-3xl text-white shadow-2xl shadow-red-900/50">V</div>
-            <h1 class="text-3xl font-black uppercase tracking-tighter mb-2">Vibz Lab</h1>
-            <p class="text-stone-500 text-[10px] font-bold uppercase tracking-[0.3em] mb-10">Executive Command Center</p>
-            
-            <div class="space-y-4 text-left">
-                <label class="text-[9px] font-black uppercase text-stone-500 ml-2">Identifiant</label>
-                <input type="email" id="email" placeholder="Email" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-red-800 text-sm transition-all">
-                
-                <label class="text-[9px] font-black uppercase text-stone-500 ml-2">Passcode</label>
-                <input type="password" id="password" placeholder="••••••••" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none focus:border-red-800 text-sm transition-all">
-                
-                <button onclick="login()" class="btn-bordo w-full p-5 rounded-2xl text-[10px] uppercase tracking-widest mt-6 transition-transform active:scale-95">Initialiser Session</button>
-            </div>
-            <p id="login-error" class="text-red-500 text-[10px] mt-6 font-bold uppercase"></p>
-        </div>
-    </div>
-
-    <div id="main-app" class="hidden flex flex-col min-h-screen">
-        <nav class="glass flex items-center justify-between px-8 sticky top-0 z-50 border-b border-white/5">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-red-800 rounded-xl flex items-center justify-center font-black text-xs italic text-white">V</div>
+    <nav class="flex items-center justify-between px-10 py-6">
+        <div class="flex items-center gap-6">
+            <div class="bg-red-700 px-3 py-1 rounded font-black italic text-sm text-white">VIBZ</div>
+            <div class="flex items-center gap-3 border-l border-white/10 pl-6">
+                <div class="w-8 h-8 rounded-full bg-stone-800 border border-white/10 overflow-hidden">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Christian" alt="AV">
+                </div>
                 <div>
-                    <p id="user-display" class="text-[10px] font-black uppercase leading-none">ADMIN</p>
-                    <p class="text-[7px] text-stone-500 font-bold uppercase tracking-widest mt-1">Status: Online</p>
+                    <p class="text-[10px] font-bold uppercase leading-none" id="user-display">Christian B.</p>
+                    <p class="text-[8px] text-stone-500 font-bold uppercase tracking-widest mt-1">Command Center</p>
                 </div>
             </div>
-            <div class="flex no-scrollbar">
-                <div class="nav-link active" onclick="loadPage('dash', this)">Stratégie</div>
-                <div class="nav-link" onclick="loadPage('staff', this)">Staff</div>
-                <div class="nav-link" onclick="loadPage('legal', this)">Contrats</div>
-                <div class="nav-link" onclick="loadPage('finance', this)">Finances</div>
-                <div class="nav-link" onclick="loadPage('chat', this)">Boardroom</div>
-            </div>
-            <button onclick="logout()" class="text-[9px] font-black text-red-700 uppercase border border-red-900/30 px-4 py-2 rounded-full hover:bg-red-900/20 transition">Logout</button>
-        </nav>
+        </div>
+        
+        <div class="flex gap-8">
+            <div class="nav-top-link cursor-pointer" onclick="loadPage('dash')">Stratégie</div>
+            <div class="nav-top-link cursor-pointer" onclick="loadPage('staff')">Staff</div>
+            <div class="nav-top-link cursor-pointer" onclick="loadPage('legal')">Legal</div>
+            <div class="nav-top-link cursor-pointer" onclick="loadPage('finance')">Finance</div>
+            <div class="nav-top-link active cursor-pointer" onclick="loadPage('chat')">Chat</div>
+        </div>
+    </nav>
 
-        <main id="content" class="p-8 max-w-6xl mx-auto w-full"></main>
-    </div>
+    <main id="main-content" class="flex-grow px-10 pb-10 flex gap-6 overflow-hidden">
+        
+        <div class="w-72 glass-main p-6 flex flex-col gap-6">
+            <h2 class="text-xl font-bold">Chat</h2>
+            
+            <div class="relative">
+                <input type="text" placeholder="Rechercher" class="w-full bg-white/5 border border-white/10 p-3 pl-10 rounded-xl text-xs outline-none">
+                <span class="absolute left-4 top-3.5 opacity-20">🔍</span>
+            </div>
+
+            <div class="space-y-2">
+                <div class="sidebar-item active p-4 flex items-center gap-3 cursor-pointer">
+                    <span class="text-stone-400 text-sm">👤</span>
+                    <span class="text-xs font-bold uppercase tracking-tight">Christian B. (CEO)</span>
+                </div>
+                <div class="sidebar-item p-4 flex items-center justify-between cursor-pointer">
+                    <div class="flex items-center gap-3">
+                        <span class="text-stone-400 text-sm">📄</span>
+                        <span class="text-xs font-bold uppercase tracking-tight">Contrats & Legal</span>
+                    </div>
+                    <span class="bg-red-700 text-[8px] px-1.5 py-0.5 rounded-full">1</span>
+                </div>
+                <div class="sidebar-item p-4 flex items-center justify-between cursor-pointer">
+                    <div class="flex items-center gap-3">
+                        <span class="text-stone-400 text-sm">📁</span>
+                        <span class="text-xs font-bold uppercase tracking-tight">CIB à l'état</span>
+                    </div>
+                    <span class="bg-red-700 text-[8px] px-1.5 py-0.5 rounded-full">5</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-grow glass-main flex flex-col overflow-hidden relative">
+            <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+                <span class="text-xs font-black uppercase tracking-widest text-stone-400">Discussion de groupe</span>
+                <div class="flex gap-2">
+                    <button class="bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-[9px] uppercase font-bold">Modifier</button>
+                    <button class="bg-red-700 px-4 py-2 rounded-lg text-[9px] uppercase font-bold">Nouveau</button>
+                </div>
+            </div>
+
+            <div id="c-box" class="flex-grow p-8 overflow-y-auto space-y-6 no-scrollbar">
+                </div>
+
+            <div class="p-6 bg-black/20">
+                <div class="relative flex gap-3">
+                    <input type="text" id="c-in" placeholder="Envoyer une directive..." class="flex-grow bg-white/5 border border-white/10 p-4 rounded-xl text-sm outline-none focus:border-red-900 transition-all">
+                    <button onclick="send()" class="bg-red-700 px-8 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-red-600 active:scale-95 transition-all">OK</button>
+                </div>
+            </div>
+
+            <div class="absolute bottom-24 right-6 w-72 glass-main p-4 border-white/10 shadow-2xl animate-fade">
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center gap-2">
+                         <span class="text-lg">📄</span>
+                         <span class="text-[10px] font-black uppercase">Contrats & Legal</span>
+                    </div>
+                    <button class="text-stone-500 hover:text-white">✕</button>
+                </div>
+                <p class="text-[9px] text-stone-400 leading-relaxed italic">Un contrat est en attente de modification... vérification rigoureuse recommandée.</p>
+            </div>
+        </div>
+
+    </main>
 
     <script>
+        // CONFIG FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyAyJ8tc-razxpr6x8Yp-dHLbkhhcln5O20",
             authDomain: "vibz-lab-command-center.firebaseapp.com",
@@ -122,179 +167,52 @@
             appId: "1:1044660724477:web:5140030489c152c66e9494"
         };
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
         const db = firebase.database();
 
-        function login() {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('password').value;
-            auth.signInWithEmailAndPassword(e, p).catch(() => { 
-                document.getElementById('login-error').innerText = "Accès refusé. Vérifiez vos identifiants."; 
-            });
-        }
-        function logout() { auth.signOut(); }
-
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('main-app').classList.remove('hidden');
-                document.getElementById('user-display').innerText = user.email.split('@')[0].toUpperCase();
-                loadPage('dash');
-            } else {
-                document.getElementById('login-screen').classList.remove('hidden');
-                document.getElementById('main-app').classList.add('hidden');
-            }
-        });
-
-        function loadPage(page, el) {
-            if(el) { 
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active')); 
-                el.classList.add('active'); 
-            }
-            const c = document.getElementById('content');
-            
-            if(page === 'dash') {
-                c.innerHTML = `
-                <div class="animate-fade">
-                    <h2 class="text-3xl font-black uppercase italic mb-10 border-l-8 border-red-800 pl-6">Boardroom <span class="text-red-700">Analytics</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div class="tile">
-                            <h3 class="text-[9px] font-black text-stone-500 uppercase mb-2">Trésorerie Actuelle</h3>
-                            <p class="text-3xl font-black text-red-700 editable" contenteditable="true">0 FCFA</p>
-                        </div>
-                        <div class="tile">
-                            <h3 class="text-[9px] font-black text-stone-500 uppercase mb-2">Objectif ROI</h3>
-                            <p class="text-3xl font-black editable" contenteditable="true">0%</p>
-                        </div>
-                        <div class="tile">
-                            <h3 class="text-[9px] font-black text-stone-500 uppercase mb-2">Signature Contrats</h3>
-                            <p class="text-3xl font-black text-blue-500 editable" contenteditable="true">0/7</p>
-                        </div>
-                    </div>
-                    <div class="tile h-48 flex flex-col justify-end">
-                         <h3 class="text-[9px] font-black uppercase text-stone-500 mb-6 italic">Performance Digitale</h3>
-                         <svg viewBox="0 0 1000 100" class="w-full opacity-50"><polyline fill="none" stroke="#B22222" stroke-width="4" points="0,90 250,80 500,60 750,30 1000,5" /></svg>
-                    </div>
-                </div>`;
-            }
-
-            if(page === 'staff') {
-                c.innerHTML = `
-                <div class="animate-fade">
-                    <h2 class="text-3xl font-black uppercase italic mb-10 border-l-8 border-red-800 pl-6">Infrastructure <span class="text-red-700">Humaine</span></h2>
-                    <div class="tile max-w-2xl">
-                        ${['CEO / Stratégie', 'Dir. Artistique', 'Responsable Tech', 'Montage Vidéo', 'Logistique', 'Comptabilité', 'Assistante Ex.'].map(r => `
-                            <div class="flex justify-between items-center py-5 border-b border-white/5">
-                                <span class="text-[10px] font-black text-stone-500 uppercase tracking-widest">${r}</span>
-                                <div class="text-right">
-                                    <p class="text-sm font-bold editable outline-none uppercase" contenteditable="true">Définir Nom</p>
-                                    <p class="text-[7px] text-green-600 font-black uppercase mt-1 italic">Poste Actif</p>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>`;
-            }
-
-            if(page === 'legal') {
-                c.innerHTML = `
-                <div class="animate-fade">
-                    <h2 class="text-3xl font-black uppercase italic mb-10 border-l-8 border-red-800 pl-6">Base <span class="text-red-700">Légale</span></h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="tile">
-                            <h3 class="text-[10px] font-black text-stone-500 mb-8 uppercase italic tracking-widest">Contrats Artistes</h3>
-                            <div class="space-y-4">
-                                <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5">
-                                    <span class="text-xs font-bold editable" contenteditable="true">NOM DE L'ARTISTE</span>
-                                    <span class="text-[8px] font-black px-3 py-1 bg-yellow-900/30 text-yellow-500 rounded-full uppercase">Review</span>
-                                </div>
-                                <button class="w-full py-4 border border-dashed border-white/10 rounded-2xl text-[9px] uppercase font-black text-stone-600 hover:text-white transition">+ Nouveau Contrat</button>
-                            </div>
-                        </div>
-                        <div class="tile">
-                            <h3 class="text-[10px] font-black text-stone-500 mb-8 uppercase italic tracking-widest">Contrats Staff</h3>
-                            <div class="space-y-4">
-                                <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl border border-white/5">
-                                    <span class="text-xs font-bold editable" contenteditable="true">CONTRAT DE PRESTATION</span>
-                                    <span class="text-[8px] font-black px-3 py-1 bg-green-900/30 text-green-500 rounded-full uppercase">Signé</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
-            }
-
-            if(page === 'finance') {
-                c.innerHTML = `
-                <div class="animate-fade">
-                    <h2 class="text-3xl font-black uppercase italic mb-10 border-l-8 border-red-800 pl-6">Gestion <span class="text-red-700">Flux</span></h2>
-                    <div class="tile p-0 overflow-hidden">
-                        <table class="w-full text-left">
-                            <thead class="bg-white/5"><tr>
-                                <th class="p-6 text-[9px] font-black text-stone-500 uppercase">Désignation</th>
-                                <th class="p-6 text-[9px] font-black text-stone-500 uppercase">Budget</th>
-                                <th class="p-6 text-[9px] font-black text-stone-500 uppercase">Dépensé</th>
-                            </tr></thead>
-                            <tbody>
-                                ${[1,2,3,4].map(i => `
-                                    <tr class="border-b border-white/5">
-                                        <td contenteditable="true" class="p-6 text-xs font-bold italic outline-none">Poste de dépense ${i}</td>
-                                        <td contenteditable="true" class="p-6 text-xs font-bold outline-none text-stone-400">0 F</td>
-                                        <td contenteditable="true" class="p-6 text-xs font-bold outline-none text-red-700">0 F</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>`;
-            }
-
-            if(page === 'chat') {
-                c.innerHTML = `
-                <div class="animate-fade">
-                    <h2 class="text-3xl font-black uppercase italic mb-8 border-l-8 border-red-800 pl-6">Boardroom <span class="text-red-700">Chat</span></h2>
-                    <div class="tile h-[60vh] flex flex-col p-0 overflow-hidden border-white/10">
-                        <div id="c-box" class="flex-grow p-8 overflow-y-auto space-y-6 no-scrollbar bg-black/20"></div>
-                        <div class="p-6 bg-black/60 border-t border-white/10 flex gap-4">
-                            <input type="text" id="c-in" placeholder="Envoyer une directive..." class="flex-grow bg-white/5 border border-white/10 p-4 rounded-2xl text-sm outline-none text-white italic focus:border-red-800 transition-all">
-                            <button onclick="send()" class="btn-bordo px-10 rounded-2xl text-[10px] uppercase shadow-lg shadow-red-900/20 active:scale-95 transition-transform">OK</button>
-                        </div>
-                    </div>
-                </div>`;
-                syncChat();
-            }
-        }
+        // SIMULATION AUTH (Pour l'affichage)
+        const currentUser = "Christian B.";
 
         function send() {
             const input = document.getElementById('c-in');
-            if(!input.value || !auth.currentUser) return;
-            db.ref('boardroom_chat').push({ 
-                u: auth.currentUser.email.split('@')[0].toUpperCase(), 
-                m: input.value, 
-                t: firebase.database.ServerValue.TIMESTAMP 
-            }).then(() => { input.value = ""; });
+            if(!input.value) return;
+            
+            db.ref('boardroom_chat').push({
+                u: currentUser,
+                m: input.value,
+                t: Date.now()
+            });
+            input.value = "";
         }
 
-        function syncChat() {
-            db.ref('boardroom_chat').limitToLast(20).on('value', s => {
-                const box = document.getElementById('c-box');
-                if(!box) return;
-                box.innerHTML = "";
-                const data = s.val();
-                if(data){
-                    Object.values(data).forEach(m => {
-                        const isMe = m.u === auth.currentUser.email.split('@')[0].toUpperCase();
-                        box.innerHTML += `
-                        <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
-                            <span class="text-[7px] font-black uppercase text-stone-600 mb-2 tracking-widest">${m.u}</span>
-                            <div class="p-4 rounded-2xl text-xs ${isMe ? 'bg-red-900/20 text-white border border-red-900/30 italic shadow-xl shadow-red-900/10' : 'bg-white/5 text-stone-300 border border-white/10'} max-w-[85%]">
-                                ${m.m}
+        // SYNC CHAT EN TEMPS RÉEL
+        db.ref('boardroom_chat').limitToLast(20).on('value', s => {
+            const box = document.getElementById('c-box');
+            box.innerHTML = "";
+            const data = s.val();
+            if(data){
+                Object.values(data).forEach(m => {
+                    const isMe = m.u === currentUser;
+                    box.innerHTML += `
+                    <div class="flex gap-4 ${isMe ? 'flex-row-reverse' : ''} animate-fade">
+                        <div class="w-8 h-8 rounded-full bg-stone-800 border border-white/10 flex-shrink-0">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${m.u}" alt="AV">
+                        </div>
+                        <div class="max-w-xl p-4 ${isMe ? 'chat-bubble-me' : 'chat-bubble-other'}">
+                            <div class="flex justify-between gap-10 mb-1">
+                                <span class="text-[9px] font-black uppercase text-stone-500 tracking-tighter">${m.u}</span>
+                                <span class="text-[7px] text-stone-600 font-bold uppercase">${new Date(m.t).toLocaleTimeString()}</span>
                             </div>
-                        </div>`;
-                    });
-                    box.scrollTop = box.scrollHeight;
-                }
-            });
+                            <p class="text-xs leading-relaxed text-stone-200">${m.m}</p>
+                        </div>
+                    </div>`;
+                });
+                box.scrollTop = box.scrollHeight;
+            }
+        });
+
+        function loadPage(page) {
+            // Logique de changement de page si besoin
+            console.log("Loading " + page);
         }
     </script>
 </body>
