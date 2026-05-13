@@ -3,152 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIBZ COMMAND | Executive Suite</title>
+    <title>VIBZ COMMAND | Executive Boardroom</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&family=Inter:wght@300;400;600&display=swap');
         
         :root {
             --bordo: #B22222;
             --bg-dark: #050505;
-            --glass: rgba(18, 18, 18, 0.75);
         }
 
         body { 
             background-color: var(--bg-dark); 
-            color: #f4f4f5; 
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #F4F4F5; 
+            font-family: 'Inter', sans-serif;
             overflow: hidden;
+            background-image: radial-gradient(circle at 0% 0%, rgba(178, 34, 34, 0.05) 0%, transparent 50%);
         }
 
-        .glass {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .sidebar-item {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 12px;
-        }
-
-        .sidebar-item:hover, .sidebar-item.active {
-            background: rgba(178, 34, 34, 0.15);
-            color: white;
-            border-left: 4px solid var(--bordo);
-        }
-
-        .card-executive {
-            background: linear-gradient(145deg, #0f0f0f 0%, #050505 100%);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 24px;
-            padding: 2rem;
-            transition: 0.3s;
-        }
-
-        .card-executive:hover {
-            border-color: var(--bordo);
-            transform: translateY(-5px);
-        }
-
-        .input-executive {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 12px 16px;
-            color: white;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        .input-executive:focus {
-            border-color: var(--bordo);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .btn-bordo {
-            background: linear-gradient(135deg, #B22222, #7A1B1B);
-            color: white;
+        /* --- STYLE SLIDES APPLIQUÉ --- */
+        .executive-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 800;
             text-transform: uppercase;
+            letter-spacing: -0.02em;
+            border-left: 6px solid var(--bordo);
+            padding-left: 20px;
+        }
+
+        .glass-card {
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid #1f1f1f;
+            border-radius: 24px;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: var(--bordo);
+            transform: translateY(-4px);
+        }
+
+        .sidebar-link {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
             letter-spacing: 1px;
-            border-radius: 12px;
+            color: #71717A;
             transition: 0.3s;
+            border-radius: 12px;
+            margin: 4px 16px;
         }
 
-        .btn-bordo:hover {
-            box-shadow: 0 10px 20px rgba(178, 34, 34, 0.3);
-            transform: scale(1.02);
+        .sidebar-link:hover, .sidebar-link.active {
+            color: white;
+            background: rgba(178, 34, 34, 0.1);
         }
 
-        /* Scrollbar */
+        .sidebar-link.active {
+            color: var(--bordo);
+            border-right: 3px solid var(--bordo);
+        }
+
+        .btn-crud {
+            border: 1px solid #27272a;
+            color: #A1A1AA;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        .btn-crud:hover {
+            border-color: var(--bordo);
+            color: var(--bordo);
+        }
+
+        .bordo-gradient {
+            background: linear-gradient(135deg, var(--bordo), #7A1B1B);
+        }
+
+        /* Scrollbar Executive */
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--bordo); border-radius: 10px; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-view { animation: slideUp 0.5s ease-out forwards; }
     </style>
 </head>
 <body class="flex h-screen">
 
-    <!-- SIDEBAR -->
-    <aside class="w-80 flex flex-col border-r border-white/5 bg-black py-8">
-        <div class="px-8 mb-12 flex items-center gap-4">
-            <div class="w-12 h-12 bg-[#B22222] rounded-2xl flex items-center justify-center shadow-2xl shadow-red-900/40">
-                <span class="text-2xl font-black italic">V</span>
-            </div>
-            <div>
-                <h1 class="text-lg font-black tracking-tighter">VIBZ COMMAND</h1>
-                <p class="text-[9px] text-stone-500 font-bold uppercase tracking-[0.2em]">Enterprise Hub</p>
+    <aside class="w-72 flex flex-col border-r border-white/5 bg-black py-10">
+        <div class="px-10 mb-16">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bordo-gradient rounded-xl flex items-center justify-center shadow-lg shadow-red-900/20">
+                    <span class="text-xl font-black italic text-white">V</span>
+                </div>
+                <div>
+                    <h1 class="text-xs font-black uppercase tracking-[0.2em]">Command</h1>
+                    <p class="text-[8px] text-stone-600 font-bold uppercase">Suite Exécutive</p>
+                </div>
             </div>
         </div>
 
-        <nav class="flex-grow space-y-2 px-4">
-            <div class="sidebar-item active p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('dash')">
-                <span class="text-xl">🏛️</span> <span class="text-sm font-bold uppercase tracking-wide">Vue Stratégique</span>
+        <nav class="flex-grow space-y-1">
+            <div class="sidebar-link active p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('dash')">
+                <span>📊</span> VUE STRATÉGIQUE
             </div>
-            <div class="sidebar-item p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('staff')">
-                <span class="text-xl">👥</span> <span class="text-sm font-bold uppercase tracking-wide">Gestion Staff</span>
+            <div class="sidebar-link p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('staff')">
+                <span>👥</span> GESTION DES 7 POSTES
             </div>
-            <div class="sidebar-item p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('finance')">
-                <span class="text-xl">📊</span> <span class="text-sm font-bold uppercase tracking-wide">Trésorerie / RH</span>
+            <div class="sidebar-link p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('finance')">
+                <span>💳</span> FINANCES & RH
             </div>
-            <div class="sidebar-item p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('chat')">
-                <span class="text-xl">💬</span> <span class="text-sm font-bold uppercase tracking-wide">Boardroom Chat</span>
+            <div class="sidebar-link p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('chat')">
+                <span>💬</span> SALLE DE RÉUNION
             </div>
         </nav>
 
-        <div class="mt-auto px-6">
-            <div class="card-executive !p-4 flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bordo-gradient flex items-center justify-center font-bold border border-white/10 bg-zinc-900">CB</div>
+        <div class="px-8 mt-auto pt-6 border-t border-white/5">
+            <div class="flex items-center gap-4">
+                <div class="w-8 h-8 rounded-lg bg-stone-900 border border-red-900/30 flex items-center justify-center font-bold text-xs text-white">CB</div>
                 <div>
-                    <p class="text-xs font-black uppercase">C. BONSAH</p>
-                    <p class="text-[9px] text-red-500 font-black uppercase">CEO & Founder</p>
+                    <p class="text-[10px] font-black uppercase">Christian B.</p>
+                    <p class="text-[8px] text-red-700 font-bold uppercase">CEO & Founder</p>
                 </div>
             </div>
         </div>
     </aside>
 
-    <!-- MAIN VIEW -->
-    <main class="flex-grow flex flex-col overflow-hidden">
-        <header class="h-24 px-12 flex items-center justify-between border-b border-white/5 bg-black/50 backdrop-blur-xl">
-            <h2 id="module-title" class="text-2xl font-black italic uppercase tracking-tighter">Tableau de Bord</h2>
-            <div class="flex items-center gap-6">
+    <main class="flex-grow flex flex-col">
+        <header class="h-24 px-12 flex items-center justify-between border-b border-white/5">
+            <h2 id="module-title" class="executive-title text-2xl italic">Dashboard Global</h2>
+            <div class="flex items-center gap-8">
                 <div class="text-right">
-                    <p id="clock" class="text-sm font-bold">--:--</p>
-                    <p class="text-[9px] text-stone-500 font-bold uppercase">Lomé, Togo</p>
+                    <p id="clock" class="text-sm font-black tracking-widest text-white">--:--</p>
+                    <p class="text-[9px] font-bold text-stone-600 uppercase">Lomé, Togo</p>
                 </div>
-                <button class="btn-bordo px-4 py-2 text-[10px]">Paramètres</button>
+                <div class="w-px h-8 bg-white/5"></div>
+                <button class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition">🔔</button>
             </div>
         </header>
 
-        <div id="content-area" class="flex-grow p-12 overflow-y-auto bg-gradient-to-br from-[#050505] to-[#0a0a0a]">
-            <!-- Dynamic Content -->
-        </div>
+        <section id="main-content" class="flex-grow p-12 overflow-y-auto bg-[#020202]">
+            </section>
     </main>
 
     <script>
-        // CONFIG FIREBASE
+        // CONFIG FIREBASE (RESTE ACTIVE)
         const firebaseConfig = {
             apiKey: "AIzaSyCaKG3bQcenE4yyGPzHoUEwr9lJ6OAssXQ",
             authDomain: "vibz-lab.firebaseapp.com",
@@ -162,136 +169,135 @@
         const db = firebase.database();
 
         function loadModule(name) {
-            const area = document.getElementById('content-area');
+            const container = document.getElementById('main-content');
             const title = document.getElementById('module-title');
             
-            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            // UI Update
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
             if(event) event.currentTarget.classList.add('active');
 
             if(name === 'dash') {
                 title.innerText = "Vue Stratégique";
-                area.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                        <div class="card-executive"><p class="text-[10px] uppercase font-bold text-stone-500 mb-4">Capital VIBZ</p><h3 class="text-4xl font-black italic">--- <span class="text-sm">FCFA</span></h3></div>
-                        <div class="card-executive border-b-4 border-red-800"><p class="text-[10px] uppercase font-bold text-stone-500 mb-4">Candidats Tournée</p><h3 id="count-tournee" class="text-4xl font-black italic">...</h3></div>
-                        <div class="card-executive"><p class="text-[10px] uppercase font-bold text-stone-500 mb-4">Missions en cours</p><h3 class="text-4xl font-black italic">07</h3></div>
-                    </div>
-                `;
+                container.innerHTML = `
+                    <div class="animate-view">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                            <div class="glass-card p-10"><p class="text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-4">Trésorerie Actuelle</p><h3 class="text-4xl font-black italic">--- <span class="text-xs">FCFA</span></h3></div>
+                            <div class="glass-card p-10 border-b-4 border-red-800"><p class="text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-4">Postulants Tournée</p><h3 id="count-t" class="text-4xl font-black italic text-red-600">0</h3></div>
+                            <div class="glass-card p-10"><p class="text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-4">Production Q2</p><h3 class="text-4xl font-black italic">14</h3></div>
+                        </div>
+                        <div class="glass-card p-10">
+                            <h4 class="text-xs font-black uppercase mb-8 accent tracking-widest">Suivi Logistique des étapes</h4>
+                            <div class="flex justify-between items-center px-6">
+                                ${['Sotouboua', 'Sokodé', 'Kara', 'Mango', 'Dapaong'].map(v => `
+                                    <div class="text-center group">
+                                        <div class="w-3 h-3 bg-red-800 rounded-full mx-auto mb-4 border-4 border-black"></div>
+                                        <p class="text-[10px] font-bold uppercase group-hover:text-red-600 transition">${v}</p>
+                                    </div>
+                                `).join('<div class="h-[2px] flex-grow bg-white/5 mx-2"></div>')}
+                            </div>
+                        </div>
+                    </div>`;
                 db.ref('registrations_tournee').on('value', s => {
-                    document.getElementById('count-tournee').innerText = s.val() ? Object.keys(s.val()).length : 0;
+                    document.getElementById('count-t').innerText = s.val() ? Object.keys(s.val()).length : 0;
                 });
             }
 
             if(name === 'staff') {
-                title.innerText = "Gestion du Personnel";
-                area.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="card-executive">
-                            <h4 class="text-xs font-black uppercase mb-8 text-red-600 tracking-[0.2em]">Outils par Poste</h4>
+                title.innerText = "Gestion des 7 Postes";
+                container.innerHTML = `
+                    <div class="animate-view grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="glass-card p-8">
+                            <h4 class="text-xs font-black uppercase mb-8 text-stone-500 italic">Outils Opérationnels</h4>
                             <div class="space-y-4">
-                                <details class="group bg-white/5 p-4 rounded-xl cursor-pointer">
-                                    <summary class="font-bold text-sm list-none flex justify-between uppercase">Assistante Exécutive <span>+</span></summary>
-                                    <div class="mt-4 grid grid-cols-2 gap-2">
-                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">Planning Studio</button>
-                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">Facturation</button>
-                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">Base Clients</button>
+                                ${['Assistante Ex.', 'Dir. Artistique', 'Technique', 'Montage', 'Logistique', 'Comptabilité'].map(role => `
+                                    <div class="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-white/5">
+                                        <span class="text-xs font-bold uppercase tracking-tighter">${role}</span>
+                                        <div class="flex gap-2"><button class="btn-crud">Outils</button><button class="btn-crud">Logs</button></div>
                                     </div>
-                                </details>
-                                <details class="group bg-white/5 p-4 rounded-xl cursor-pointer">
-                                    <summary class="font-bold text-sm list-none flex justify-between uppercase">Technique / Montage <span>+</span></summary>
-                                    <div class="mt-4 grid grid-cols-2 gap-2">
-                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">État Matériel</button>
-                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">Serveur NAS</button>
-                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">Rendus Vidéo</button>
-                                    </div>
-                                </details>
+                                `).join('')}
                             </div>
                         </div>
-                        <div class="card-executive border-l-4 border-red-800">
-                            <h4 class="text-xs font-black uppercase mb-8 text-stone-500 tracking-[0.2em]">Édition du Staff (Modifiable)</h4>
-                            <div class="space-y-3">
-                                <input type="text" placeholder="Nom de l'employé" class="w-full input-executive">
-                                <select class="w-full input-executive bg-black">
-                                    <option>Choisir le Poste</option>
-                                    <option>Logistique</option>
-                                    <option>Montage</option>
-                                    <option>Artiste</option>
+                        <div class="glass-card p-8">
+                            <h4 class="text-xs font-black uppercase mb-8 text-stone-500 italic">Édition RH</h4>
+                            <div class="space-y-6">
+                                <input type="text" placeholder="Nom du collaborateur..." class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-red-800 text-sm">
+                                <select class="w-full bg-black border border-white/10 p-5 rounded-2xl outline-none text-sm font-bold uppercase">
+                                    <option>Choisir le Poste</option><option>Montage</option><option>Logistique</option>
                                 </select>
-                                <button class="btn-bordo w-full py-4 text-xs">Mettre à jour le Personnel</button>
+                                <button class="w-full bordo-gradient p-5 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-red-900/20">Mettre à jour le personnel</button>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
 
             if(name === 'finance') {
                 title.innerText = "Trésorerie & RH";
-                area.innerHTML = `
-                    <div class="card-executive mb-8">
-                        <div class="flex justify-between items-center mb-8">
-                            <h4 class="text-xs font-black uppercase text-stone-500 tracking-[0.2em]">Mouvements de Caisse</h4>
-                            <button class="btn-bordo px-6 py-2 text-[10px]">Nouvelle Entrée</button>
+                container.innerHTML = `
+                    <div class="animate-view glass-card overflow-hidden">
+                        <div class="p-8 border-b border-white/5 flex justify-between items-center">
+                            <h4 class="text-xs font-black uppercase text-stone-500 tracking-widest italic">État des Finances</h4>
+                            <button class="btn-crud !text-red-600 !border-red-900/30">Nouveau Mouvement</button>
                         </div>
-                        <table class="w-full text-left text-sm">
-                            <thead class="text-red-700 font-black uppercase text-[10px] border-b border-white/5">
-                                <tr><th class="py-4">Libellé</th><th>Montant</th><th>Status</th><th>Actions</th></tr>
-                            </thead>
-                            <tbody class="text-stone-400">
-                                <tr class="border-b border-white/5"><td class="py-4">Tournée - Étape Kara</td><td>850.000 F</td><td><span class="text-green-500">Réglé</span></td><td><button class="text-red-500 text-[10px] uppercase font-bold">Éditer</button></td></tr>
-                                <tr class="border-b border-white/5"><td class="py-4">Maintenance Studio</td><td>45.000 F</td><td><span class="text-orange-500">En cours</span></td><td><button class="text-red-500 text-[10px] uppercase font-bold">Éditer</button></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                `;
+                        <div class="p-8">
+                            <table class="w-full text-left">
+                                <thead class="text-[10px] font-black uppercase text-red-700">
+                                    <tr><th class="py-4">Catégorie</th><th>Budget</th><th>Réel</th><th>Status</th><th>Actions</th></tr>
+                                </thead>
+                                <tbody class="text-xs font-semibold text-stone-300">
+                                    <tr class="border-b border-white/5"><td class="py-6 italic uppercase">Tournée Kara</td><td>4.5M F</td><td>3.8M F</td><td class="text-green-500">OPTIMISÉ</td><td><button class="btn-crud">Editer</button></td></tr>
+                                    <tr class="border-b border-white/5"><td class="py-6 italic uppercase">Production Podcast</td><td>1.2M F</td><td>1.4M F</td><td class="text-red-500">ALERTE</td><td><button class="btn-crud">Editer</button></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>`;
             }
 
             if(name === 'chat') {
-                title.innerText = "Executive Chatroom";
-                area.innerHTML = `
-                    <div class="flex flex-col h-[65vh] glass rounded-3xl overflow-hidden">
-                        <div id="chat-stream" class="flex-grow p-8 space-y-4 overflow-y-auto"></div>
-                        <div class="p-6 border-t border-white/5 flex gap-4 bg-black/50">
-                            <input type="text" id="chat-msg" placeholder="Message interne..." class="flex-grow input-executive">
-                            <button onclick="send()" class="btn-bordo px-10">Envoyer</button>
+                title.innerText = "Executive Boardroom Chat";
+                container.innerHTML = `
+                    <div class="animate-view flex flex-col h-[65vh] glass-card overflow-hidden">
+                        <div id="c-box" class="flex-grow p-10 overflow-y-auto space-y-6"></div>
+                        <div class="p-6 bg-black border-t border-white/5 flex gap-4">
+                            <input type="text" id="c-in" placeholder="Directive exécutive..." class="flex-grow bg-white/5 border border-white/10 px-6 py-4 rounded-2xl outline-none focus:border-red-800 text-sm italic">
+                            <button onclick="sendMsg()" class="bordo-gradient px-12 rounded-2xl font-black uppercase text-[10px] tracking-widest">Lancer</button>
                         </div>
-                    </div>
-                `;
-                loadChat();
+                    </div>`;
+                syncChat();
             }
         }
 
-        function send() {
-            const input = document.getElementById('chat-msg');
+        // --- MOTEUR FONCTIONNEL ---
+        function sendMsg() {
+            const input = document.getElementById('c-in');
             if(!input.value) return;
-            db.ref('internal_chat').push({ user: "CEO", msg: input.value, timestamp: Date.now() });
+            db.ref('internal_chat').push({ u: "Christian B. (CEO)", m: input.value, t: Date.now() });
             input.value = "";
         }
 
-        function loadChat() {
-            db.ref('internal_chat').limitToLast(30).on('value', s => {
-                const stream = document.getElementById('chat-stream');
-                stream.innerHTML = "";
-                if(s.val()) {
-                    Object.values(s.val()).forEach(m => {
-                        const isMe = m.user === "CEO";
-                        stream.innerHTML += `
+        function syncChat() {
+            db.ref('internal_chat').limitToLast(25).on('value', s => {
+                const box = document.getElementById('c-box'); box.innerHTML = "";
+                const data = s.val();
+                if(data) {
+                    Object.values(data).forEach(msg => {
+                        const isMe = msg.u.includes("Christian");
+                        box.innerHTML += `
                             <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
-                                <span class="text-[8px] font-black uppercase text-stone-500 mb-1">${m.user}</span>
-                                <div class="px-4 py-3 rounded-2xl text-xs ${isMe ? 'bg-red-900/30 text-white border border-red-900/50 italic' : 'bg-zinc-800 text-stone-300'} max-w-md">
-                                    ${m.msg}
+                                <span class="text-[8px] font-black uppercase text-stone-600 mb-1">${msg.u}</span>
+                                <div class="px-5 py-4 rounded-3xl text-xs max-w-md ${isMe ? 'bg-red-900/20 text-white border border-red-900/30 italic font-medium' : 'bg-stone-900 text-stone-400 border border-white/5'}">
+                                    ${msg.m}
                                 </div>
-                            </div>
-                        `;
+                            </div>`;
                     });
-                    stream.scrollTop = stream.scrollHeight;
+                    box.scrollTop = box.scrollHeight;
                 }
             });
         }
 
-        // Horloge
+        // Horloge temps réel
         setInterval(() => {
             const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('clock').innerText = now.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit', second:'2-digit'});
         }, 1000);
 
         loadModule('dash');
