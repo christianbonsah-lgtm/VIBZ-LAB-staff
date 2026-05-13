@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIBZ COMMAND CENTER | Interne</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { background-color: #0a0a0a; color: #e5e5e5; font-family: 'Inter', sans-serif; overflow: hidden; }
+        .sidebar { width: 260px; background: #000; border-right: 1px solid #1f1f1f; height: 100vh; }
+        .accent-bordo { color: #B22222; }
+        .bg-bordo { background-color: #B22222; }
+        .tool-card { background: rgba(255,255,255,0.03); border: 1px solid #1f1f1f; border-radius: 8px; transition: 0.3s; }
+        .tool-card:hover { border-color: #B22222; background: rgba(178,34,34,0.05); }
+        .nav-item { padding: 12px 24px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 600; color: #737373; }
+        .nav-item:hover, .nav-item.active { color: white; background: rgba(255,255,255,0.05); border-left: 3px solid #B22222; }
+    </style>
+</head>
+<body class="flex">
+
+    <aside class="sidebar flex flex-col justify-between py-8">
+        <div>
+            <div class="px-8 mb-10 flex items-center gap-3">
+                <div class="bg-bordo text-white font-black italic px-2 rounded">VL</div>
+                <h1 class="text-xs font-black uppercase tracking-widest">Command Center</h1>
+            </div>
+            
+            <nav>
+                <div class="nav-item active" onclick="loadModule('dash')">📊 Dashboard Global</div>
+                <div class="nav-item" onclick="loadModule('admin')">💼 Administration</div>
+                <div class="nav-item" onclick="loadModule('crea')">🎨 Direction Artistique</div>
+                <div class="nav-item" onclick="loadModule('tech')">⚙️ Technique & Flux</div>
+                <div class="nav-item" onclick="loadModule('reunion')">💬 Salle de Réunion</div>
+            </nav>
+        </div>
+
+        <div class="px-8 border-t border-white/5 pt-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-stone-800 border border-bordo"></div>
+                <div class="text-[10px]">
+                    <p class="font-bold text-white uppercase">C. Bonsah</p>
+                    <p class="accent-bordo uppercase">Administrateur</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-grow p-10 overflow-y-auto" id="app-space">
+        </main>
+
+    <script>
+        function loadModule(name) {
+            const space = document.getElementById('app-space');
+            
+            // Mise à jour visuelle menu
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            if(name === 'dash') {
+                space.innerHTML = `
+                    <h2 class="text-3xl font-black mb-8 italic uppercase accent-bordo">État de l'Entreprise</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="tool-card p-6">
+                            <p class="text-zinc-500 text-[10px] uppercase font-black mb-2">Trésorerie</p>
+                            <h3 class="text-2xl font-black">--- FCFA</h3>
+                        </div>
+                        <div class="tool-card p-6 border-l-4 border-green-600">
+                            <p class="text-zinc-500 text-[10px] uppercase font-black mb-2">Projets Actifs</p>
+                            <h3 class="text-2xl font-black">12</h3>
+                        </div>
+                        <div class="tool-card p-6">
+                            <p class="text-zinc-500 text-[10px] uppercase font-black mb-2">Personnel présent</p>
+                            <h3 class="text-2xl font-black">7 / 7</h3>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if(name === 'reunion') {
+                space.innerHTML = `
+                    <div class="h-full flex flex-col">
+                        <h2 class="text-3xl font-black mb-8 italic uppercase accent-bordo">Salle de Réunion</h2>
+                        <div class="flex-grow glass rounded-xl border border-white/5 p-6 mb-4 overflow-y-auto bg-stone-900/30">
+                            <div class="space-y-4">
+                                <div class="flex gap-4">
+                                    <div class="w-8 h-8 bg-zinc-800 rounded"></div>
+                                    <div class="bg-zinc-800/50 p-3 rounded-lg text-xs max-w-md">Bonjour l'équipe, on fait le point sur la tournée Kara ?</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <input type="text" placeholder="Écrire à l'équipe..." class="flex-grow bg-white/5 border border-white/10 p-4 rounded-lg outline-none focus:border-bordo transition text-sm">
+                            <button class="bg-bordo px-8 rounded-lg font-black uppercase text-xs">Envoyer</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if(name === 'admin') {
+                space.innerHTML = `
+                    <h2 class="text-3xl font-black mb-8 italic uppercase accent-bordo">Gestion Administrative</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="tool-card p-6 flex justify-between items-center">
+                            <span>📄 Générer une facture</span>
+                            <button class="bg-white/5 p-2 rounded px-4 text-[10px] uppercase font-bold italic">Ouvrir</button>
+                        </div>
+                        <div class="tool-card p-6 flex justify-between items-center">
+                            <span>📅 Planning Global Studio</span>
+                            <button class="bg-white/5 p-2 rounded px-4 text-[10px] uppercase font-bold italic">Gérer</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Chargement par défaut
+        loadModule('dash');
+    </script>
+</body>
+</html>
