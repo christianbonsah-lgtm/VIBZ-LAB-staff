@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIBZ COMMAND | Multi-User Access</title>
+    <title>VIBZ COMMAND | Executive Boardroom</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
@@ -14,77 +14,75 @@
         body { background-color: var(--bg); color: #F4F4F5; font-family: 'Inter', sans-serif; margin: 0; }
         .btn-bordo { background: linear-gradient(135deg, var(--bordo), #7A1B1B); transition: 0.3s; }
         .glass { background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
+        .nav-link { font-family: 'Plus Jakarta Sans'; font-size: 10px; font-weight: 800; text-transform: uppercase; cursor: pointer; padding: 20px; color: #71717A; }
+        .nav-link.active { color: white; border-bottom: 3px solid var(--bordo); }
         .hidden { display: none !important; }
-        .nav-link { font-family: 'Plus Jakarta Sans'; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; padding: 20px; color: #71717A; }
-        .nav-link.active { color: white; border-bottom: 2px solid var(--bordo); }
+        .slide-title { font-family: 'Plus Jakarta Sans'; font-weight: 800; text-transform: uppercase; border-left: 8px solid var(--bordo); padding-left: 20px; font-size: 32px; }
     </style>
 </head>
 <body class="min-h-screen">
 
     <div id="login-screen" class="flex items-center justify-center min-h-screen px-6">
         <div class="glass p-10 rounded-3xl w-full max-w-md text-center">
-            <div class="w-16 h-16 bg-[#B22222] rounded-2xl flex items-center justify-center mx-auto mb-8 font-black italic text-2xl shadow-xl shadow-red-900/40">V</div>
-            <h1 class="text-2xl font-black uppercase tracking-tighter mb-2">Vibz Command</h1>
-            <p class="text-stone-500 text-xs mb-8 uppercase font-bold tracking-widest">Boardroom Access</p>
-            
+            <div class="w-16 h-16 bg-[#B22222] rounded-2xl flex items-center justify-center mx-auto mb-8 font-black italic text-2xl text-white shadow-xl shadow-red-900/40">V</div>
+            <h1 class="text-2xl font-black uppercase tracking-tighter mb-8">Vibz Command</h1>
             <div class="space-y-4">
-                <input type="email" id="email" placeholder="Email professionnel" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-red-800 text-sm">
+                <input type="email" id="email" placeholder="Email pro" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-red-800 text-sm">
                 <input type="password" id="password" placeholder="Mot de passe" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-red-800 text-sm">
-                <button onclick="login()" class="btn-bordo w-full p-4 rounded-xl font-black uppercase text-xs tracking-widest mt-4">Se Connecter</button>
+                <button onclick="login()" class="btn-bordo w-full p-4 rounded-xl font-black uppercase text-xs tracking-widest mt-4 text-white">Connexion</button>
             </div>
             <p id="login-error" class="text-red-500 text-[10px] mt-4 font-bold uppercase"></p>
         </div>
     </div>
 
     <div id="main-app" class="hidden flex flex-col min-h-screen">
-        <nav class="glass flex items-center justify-between px-6 sticky top-0 z-50">
+        <nav class="glass flex items-center justify-between px-8 sticky top-0 z-50">
             <div class="flex items-center gap-3">
-                <div class="w-6 h-6 bg-red-800 rounded flex items-center justify-center font-black text-[10px] italic">V</div>
-                <span id="user-role" class="text-[9px] font-black uppercase tracking-widest accent">Membre Staff</span>
+                <div class="w-6 h-6 bg-red-800 rounded flex items-center justify-center font-black text-[10px] italic text-white">V</div>
+                <span id="user-display" class="text-[9px] font-black uppercase tracking-widest text-stone-500">Boardroom</span>
             </div>
             <div class="flex">
-                <div class="nav-link active" onclick="loadPage('dash')">Dash</div>
-                <div class="nav-link" onclick="loadPage('chat')">Boardroom</div>
-                <div class="nav-link text-red-500" onclick="logout()">Déconnexion</div>
+                <div class="nav-link active" onclick="loadPage('dash', this)">Stratégie</div>
+                <div class="nav-link" onclick="loadPage('chat', this)">Chat</div>
+                <div class="nav-link text-red-500" onclick="logout()">Logout</div>
             </div>
         </nav>
 
-        <main id="content" class="p-6 max-w-4xl mx-auto w-full">
+        <main id="content" class="p-8 max-w-5xl mx-auto w-full">
             </main>
     </div>
 
     <script>
-        // CONFIG FIREBASE
+        // CONFIGURATION FIREBASE AVEC TES CLÉS
         const firebaseConfig = {
-            apiKey: "AIzaSyCaKG3bQcenE4yyGPzHoUEwr9lJ6OAssXQ",
-            authDomain: "vibz-lab.firebaseapp.com",
-            databaseURL: "https://vibz-lab-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "vibz-lab",
-            storageBucket: "vibz-lab.firebasestorage.app",
-            messagingSenderId: "39630575995",
-            appId: "1:39630575995:web:da457e123e2cb54274c5de"
+            apiKey: "AIzaSyAyJ8tc-razxpr6x8Yp-dHLbkhhcln5O20",
+            authDomain: "vibz-lab-command-center.firebaseapp.com",
+            projectId: "vibz-lab-command-center",
+            storageBucket: "vibz-lab-command-center.firebasestorage.app",
+            messagingSenderId: "1044660724477",
+            appId: "1:1044660724477:web:5140030489c152c66e9494",
+            measurementId: "G-JN9J2RHWXH"
         };
+
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
 
-        // GESTION DE LA CONNEXION
+        // Fonctions Auth
         function login() {
             const e = document.getElementById('email').value;
             const p = document.getElementById('password').value;
             auth.signInWithEmailAndPassword(e, p).catch(err => {
-                document.getElementById('login-error').innerText = "Accès refusé : Identifiants invalides";
+                document.getElementById('login-error').innerText = "Accès refusé";
             });
         }
-
         function logout() { auth.signOut(); }
 
-        // SURVEILLER L'ÉTAT DE CONNEXION
         auth.onAuthStateChanged(user => {
             if (user) {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-app').classList.remove('hidden');
-                document.getElementById('user-role').innerText = user.email.split('@')[0]; // Affiche le nom avant @
+                document.getElementById('user-display').innerText = user.email.split('@')[0];
                 loadPage('dash');
             } else {
                 document.getElementById('login-screen').classList.remove('hidden');
@@ -92,55 +90,73 @@
             }
         });
 
-        function loadPage(page) {
+        function loadPage(page, el) {
+            if(el) {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                el.classList.add('active');
+            }
             const c = document.getElementById('content');
+            
             if(page === 'dash') {
                 c.innerHTML = `
-                    <div class="animate-fade">
-                        <h2 class="text-3xl font-black uppercase italic mb-8 border-l-4 border-red-800 pl-4">Dashboard</h2>
-                        <div class="grid grid-cols-1 gap-4">
-                            <div class="glass p-8 rounded-2xl">
-                                <h3 class="text-[10px] font-bold text-stone-500 uppercase tracking-widest mb-4">Missions assignées</h3>
-                                <div class="space-y-3">
-                                    <div class="p-4 bg-white/5 rounded-xl border border-white/5 flex justify-between items-center">
-                                        <span class="text-xs font-bold">Préparation Tournée</span>
-                                        <span class="text-[9px] bg-red-900/30 text-red-500 px-2 py-1 rounded">Urgent</span>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="animate-fade">
+                    <h2 class="slide-title mb-12">Projections & <span class="text-red-700">Performance</span></h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                        <div class="glass p-8 rounded-3xl border-l-4 border-red-800">
+                            <h3 class="text-xs font-bold text-stone-500 uppercase mb-4">ROI Prévu Q4</h3>
+                            <p class="text-4xl font-black italic">+52%</p>
+                        </div>
+                        <div class="glass p-8 rounded-3xl">
+                            <h3 class="text-xs font-bold text-stone-500 uppercase mb-4">Missions Staff</h3>
+                            <p class="text-sm font-medium text-stone-400">7 membres actifs en session.</p>
                         </div>
                     </div>
-                `;
+                    <div class="glass p-8 rounded-3xl">
+                         <h3 class="text-[10px] font-black uppercase text-stone-500 mb-8 italic">Croissance Vibz Lab</h3>
+                         <svg viewBox="0 0 1000 200" class="w-full h-32"><polyline fill="none" stroke="#B22222" stroke-width="4" points="0,180 250,150 500,100 750,40 1000,10" /></svg>
+                    </div>
+                </div>`;
             }
+
             if(page === 'chat') {
                 c.innerHTML = `
-                    <h2 class="text-3xl font-black uppercase italic mb-8 border-l-4 border-red-800 pl-4">Boardroom Chat</h2>
-                    <div class="glass rounded-2xl h-[60vh] flex flex-col overflow-hidden">
-                        <div id="c-box" class="flex-grow p-6 overflow-y-auto space-y-4"></div>
-                        <div class="p-4 bg-black/50 border-t border-white/5 flex gap-2">
-                            <input type="text" id="c-in" class="flex-grow bg-white/5 border border-white/10 p-3 rounded-xl text-sm outline-none">
-                            <button onclick="send()" class="btn-bordo px-6 rounded-xl font-black text-[10px] uppercase">OK</button>
-                        </div>
+                <h2 class="slide-title mb-8">Boardroom <span class="text-red-700">Chat</span></h2>
+                <div class="glass rounded-3xl h-[60vh] flex flex-col overflow-hidden">
+                    <div id="c-box" class="flex-grow p-6 overflow-y-auto space-y-4"></div>
+                    <div class="p-4 bg-black/50 border-t border-white/5 flex gap-2">
+                        <input type="text" id="c-in" placeholder="Directive..." class="flex-grow bg-white/5 border border-white/10 p-4 rounded-xl text-sm outline-none italic">
+                        <button onclick="send()" class="btn-bordo px-8 rounded-xl font-black text-[10px] uppercase text-white">Envoyer</button>
                     </div>
-                `;
+                </div>`;
                 syncChat();
             }
         }
 
         function send() {
             const input = document.getElementById('c-in');
-            const user = auth.currentUser;
             if(!input.value) return;
-            db.ref('internal_chat').push({ u: user.email.split('@')[0], m: input.value, t: Date.now() });
+            db.ref('boardroom_chat').push({ 
+                u: auth.currentUser.email.split('@')[0], 
+                m: input.value, 
+                t: Date.now() 
+            });
             input.value = "";
         }
 
         function syncChat() {
-            db.ref('internal_chat').limitToLast(15).on('value', s => {
-                const box = document.getElementById('c-box'); box.innerHTML = "";
+            db.ref('boardroom_chat').limitToLast(20).on('value', s => {
+                const box = document.getElementById('c-box');
+                box.innerHTML = "";
                 if(s.val()){
                     Object.values(s.val()).forEach(m => {
-                        box.innerHTML += `<div class="mb-2"><span class="text-[8px] font-black uppercase text-red-700">${m.u}</span><p class="text-xs text-stone-300 bg-white/5 p-3 rounded-lg mt-1">${m.m}</p></div>`;
+                        const isMe = m.u === auth.currentUser.email.split('@')[0];
+                        box.innerHTML += `
+                        <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+                            <span class="text-[8px] font-black uppercase text-stone-600 mb-1">${m.u}</span>
+                            <div class="p-4 rounded-2xl text-xs ${isMe ? 'bg-red-900/20 text-white border border-red-900/30 italic' : 'bg-white/5 text-stone-400'} max-w-sm">
+                                ${m.m}
+                            </div>
+                        </div>`;
                     });
                     box.scrollTop = box.scrollHeight;
                 }
