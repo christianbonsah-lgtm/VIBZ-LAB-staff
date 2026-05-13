@@ -10,65 +10,28 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        
-        :root { --bordo: #B22222; --accent-red: #8B0000; }
-
+        :root { --bordo: #B22222; }
         body { 
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
-                        url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=2069'); /* Image de bureau sombre type boardroom */
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: #E4E4E7; 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            height: 100vh;
-            overflow: hidden;
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: #E4E4E7; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; overflow: hidden;
         }
-
-        .glass-main {
-            background: rgba(20, 20, 20, 0.4);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 24px;
-        }
-
-        .sidebar-item {
-            transition: 0.2s;
-            border-radius: 12px;
-            margin-bottom: 4px;
-        }
+        .glass-main { background: rgba(20, 20, 20, 0.4); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; }
+        .sidebar-item { transition: 0.2s; border-radius: 12px; cursor: pointer; border: 1px solid transparent; }
         .sidebar-item:hover { background: rgba(255,255,255,0.05); }
-        .sidebar-item.active { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); }
-
-        .chat-bubble-me {
-            background: rgba(178, 34, 34, 0.25);
-            border-left: 4px solid var(--bordo);
-            border-radius: 12px;
-        }
-
-        .chat-bubble-other {
-            background: rgba(40, 40, 40, 0.4);
-            border-radius: 12px;
-        }
-
-        .nav-top-link {
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: #71717A;
-            transition: 0.3s;
-            letter-spacing: 0.5px;
-        }
-        .nav-top-link:hover, .nav-top-link.active { color: white; }
-
-        input::placeholder { color: #52525B; }
-        
+        .sidebar-item.active { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); }
+        .nav-top-link { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #71717A; cursor: pointer; transition: 0.3s; }
+        .nav-top-link.active { color: white; border-bottom: 2px solid var(--bordo); padding-bottom: 4px; }
+        .chat-bubble-me { background: rgba(178, 34, 34, 0.2); border-left: 4px solid var(--bordo); border-radius: 12px; }
+        .chat-bubble-other { background: rgba(40, 40, 40, 0.4); border-radius: 12px; }
+        .animate-fade { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="flex flex-col">
+<body class="flex flex-col h-screen">
 
-    <nav class="flex items-center justify-between px-10 py-6">
+    <nav class="flex items-center justify-between px-10 py-6 shrink-0">
         <div class="flex items-center gap-6">
             <div class="bg-red-700 px-3 py-1 rounded font-black italic text-sm text-white">VIBZ</div>
             <div class="flex items-center gap-3 border-l border-white/10 pl-6">
@@ -82,82 +45,31 @@
             </div>
         </div>
         
-        <div class="flex gap-8">
-            <div class="nav-top-link cursor-pointer" onclick="loadPage('dash')">Stratégie</div>
-            <div class="nav-top-link cursor-pointer" onclick="loadPage('staff')">Staff</div>
-            <div class="nav-top-link cursor-pointer" onclick="loadPage('legal')">Legal</div>
-            <div class="nav-top-link cursor-pointer" onclick="loadPage('finance')">Finance</div>
-            <div class="nav-top-link active cursor-pointer" onclick="loadPage('chat')">Chat</div>
+        <div class="flex gap-8" id="top-nav">
+            <div class="nav-top-link active" onclick="switchTab('chat', this)">Chat</div>
+            <div class="nav-top-link" onclick="switchTab('staff', this)">Staff</div>
+            <div class="nav-top-link" onclick="switchTab('finance', this)">Finance</div>
+            <div class="nav-top-link" onclick="switchTab('legal', this)">Legal</div>
         </div>
     </nav>
 
-    <main id="main-content" class="flex-grow px-10 pb-10 flex gap-6 overflow-hidden">
+    <div class="flex flex-grow px-10 pb-10 gap-6 overflow-hidden">
         
-        <div class="w-72 glass-main p-6 flex flex-col gap-6">
-            <h2 class="text-xl font-bold">Chat</h2>
-            
+        <aside class="w-72 glass-main p-6 flex flex-col gap-6 shrink-0">
+            <h2 class="text-xl font-bold tracking-tight" id="sidebar-title">Discussion</h2>
             <div class="relative">
-                <input type="text" placeholder="Rechercher" class="w-full bg-white/5 border border-white/10 p-3 pl-10 rounded-xl text-xs outline-none">
-                <span class="absolute left-4 top-3.5 opacity-20">🔍</span>
+                <input type="text" placeholder="Rechercher..." class="w-full bg-white/5 border border-white/10 p-3 pl-10 rounded-xl text-xs outline-none focus:border-red-900/50 transition-all">
+                <span class="absolute left-4 top-3.5 opacity-20 text-xs">🔍</span>
             </div>
+            <nav class="space-y-1" id="sidebar-content">
+                </nav>
+        </aside>
 
-            <div class="space-y-2">
-                <div class="sidebar-item active p-4 flex items-center gap-3 cursor-pointer">
-                    <span class="text-stone-400 text-sm">👤</span>
-                    <span class="text-xs font-bold uppercase tracking-tight">Christian B. (CEO)</span>
-                </div>
-                <div class="sidebar-item p-4 flex items-center justify-between cursor-pointer">
-                    <div class="flex items-center gap-3">
-                        <span class="text-stone-400 text-sm">📄</span>
-                        <span class="text-xs font-bold uppercase tracking-tight">Contrats & Legal</span>
-                    </div>
-                    <span class="bg-red-700 text-[8px] px-1.5 py-0.5 rounded-full">1</span>
-                </div>
-                <div class="sidebar-item p-4 flex items-center justify-between cursor-pointer">
-                    <div class="flex items-center gap-3">
-                        <span class="text-stone-400 text-sm">📁</span>
-                        <span class="text-xs font-bold uppercase tracking-tight">CIB à l'état</span>
-                    </div>
-                    <span class="bg-red-700 text-[8px] px-1.5 py-0.5 rounded-full">5</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex-grow glass-main flex flex-col overflow-hidden relative">
-            <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
-                <span class="text-xs font-black uppercase tracking-widest text-stone-400">Discussion de groupe</span>
-                <div class="flex gap-2">
-                    <button class="bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-[9px] uppercase font-bold">Modifier</button>
-                    <button class="bg-red-700 px-4 py-2 rounded-lg text-[9px] uppercase font-bold">Nouveau</button>
-                </div>
-            </div>
-
-            <div id="c-box" class="flex-grow p-8 overflow-y-auto space-y-6 no-scrollbar">
-                </div>
-
-            <div class="p-6 bg-black/20">
-                <div class="relative flex gap-3">
-                    <input type="text" id="c-in" placeholder="Envoyer une directive..." class="flex-grow bg-white/5 border border-white/10 p-4 rounded-xl text-sm outline-none focus:border-red-900 transition-all">
-                    <button onclick="send()" class="bg-red-700 px-8 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-red-600 active:scale-95 transition-all">OK</button>
-                </div>
-            </div>
-
-            <div class="absolute bottom-24 right-6 w-72 glass-main p-4 border-white/10 shadow-2xl animate-fade">
-                <div class="flex justify-between items-start mb-2">
-                    <div class="flex items-center gap-2">
-                         <span class="text-lg">📄</span>
-                         <span class="text-[10px] font-black uppercase">Contrats & Legal</span>
-                    </div>
-                    <button class="text-stone-500 hover:text-white">✕</button>
-                </div>
-                <p class="text-[9px] text-stone-400 leading-relaxed italic">Un contrat est en attente de modification... vérification rigoureuse recommandée.</p>
-            </div>
-        </div>
-
-    </main>
+        <section id="page-content" class="flex-grow glass-main flex flex-col overflow-hidden animate-fade">
+            </section>
+    </div>
 
     <script>
-        // CONFIG FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyAyJ8tc-razxpr6x8Yp-dHLbkhhcln5O20",
             authDomain: "vibz-lab-command-center.firebaseapp.com",
@@ -168,52 +80,99 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-
-        // SIMULATION AUTH (Pour l'affichage)
         const currentUser = "Christian B.";
 
+        // --- MOTEUR DE NAVIGATION ---
+        function switchTab(tab, el) {
+            if(el) {
+                document.querySelectorAll('.nav-top-link').forEach(n => n.classList.remove('active'));
+                el.classList.add('active');
+            }
+            const container = document.getElementById('page-content');
+            const sideContent = document.getElementById('sidebar-content');
+            const sideTitle = document.getElementById('sidebar-title');
+
+            if(tab === 'chat') {
+                sideTitle.innerText = "Discussion";
+                sideContent.innerHTML = `
+                    <div class="sidebar-item active p-4 flex items-center gap-3"><span class="text-xs">👤</span><span class="text-[10px] font-bold uppercase">Christian B. (CEO)</span></div>
+                    <div class="sidebar-item p-4 flex items-center justify-between"><div class="flex items-center gap-3"><span class="text-xs">📄</span><span class="text-[10px] font-bold uppercase">Contrats & Legal</span></div><span class="bg-red-700 text-[8px] px-1.5 py-0.5 rounded-full">1</span></div>
+                `;
+                container.innerHTML = `
+                    <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+                        <span class="text-[10px] font-black uppercase text-stone-500">Boardroom Live</span>
+                        <div class="flex gap-2"><button class="bg-red-700 px-4 py-2 rounded-lg text-[9px] uppercase font-bold">Nouveau</button></div>
+                    </div>
+                    <div id="c-box" class="flex-grow p-8 overflow-y-auto space-y-6 no-scrollbar"></div>
+                    <div class="p-6 bg-black/20 flex gap-3">
+                        <input type="text" id="c-in" onkeypress="if(event.key==='Enter')send()" placeholder="Directive..." class="flex-grow bg-white/5 border border-white/10 p-4 rounded-xl text-sm outline-none">
+                        <button onclick="send()" class="bg-red-700 px-8 rounded-xl font-bold text-xs uppercase">OK</button>
+                    </div>`;
+                initChat();
+            }
+
+            if(tab === 'staff') {
+                sideTitle.innerText = "Equipes";
+                sideContent.innerHTML = `<div class="sidebar-item active p-4 text-[10px] font-bold">PROD MÉDIA</div><div class="sidebar-item p-4 text-[10px] font-bold">LOGISTIQUE</div>`;
+                container.innerHTML = `
+                    <div class="p-10 grid grid-cols-2 gap-6">
+                        ${['Direction', 'Montage', 'Technique', 'Logistique'].map(post => `
+                            <div class="p-6 bg-white/5 border border-white/10 rounded-2xl">
+                                <p class="text-[9px] font-black text-red-700 uppercase mb-2">${post}</p>
+                                <input class="bg-transparent border-none text-sm font-bold w-full outline-none" value="Nom à définir" contenteditable="true">
+                            </div>
+                        `).join('')}
+                    </div>`;
+            }
+
+            if(tab === 'finance') {
+                sideTitle.innerText = "Trésorerie";
+                sideContent.innerHTML = `<div class="sidebar-item active p-4 text-[10px] font-bold">RECAP GLOBAL</div>`;
+                container.innerHTML = `
+                    <div class="p-10">
+                        <table class="w-full text-left">
+                            <tr class="text-[9px] uppercase text-stone-500 border-b border-white/10"><th class="pb-4">Poste</th><th class="pb-4">Prévu</th><th class="pb-4">Réel</th></tr>
+                            <tr class="border-b border-white/5"><td class="py-4 text-xs italic">Production</td><td class="py-4 font-bold">0 F</td><td class="py-4 text-red-700 font-bold">0 F</td></tr>
+                        </table>
+                    </div>`;
+            }
+        }
+
+        // --- FONCTIONS CHAT ---
         function send() {
             const input = document.getElementById('c-in');
             if(!input.value) return;
-            
-            db.ref('boardroom_chat').push({
-                u: currentUser,
-                m: input.value,
-                t: Date.now()
-            });
+            db.ref('boardroom_chat').push({ u: currentUser, m: input.value, t: Date.now() });
             input.value = "";
         }
 
-        // SYNC CHAT EN TEMPS RÉEL
-        db.ref('boardroom_chat').limitToLast(20).on('value', s => {
-            const box = document.getElementById('c-box');
-            box.innerHTML = "";
-            const data = s.val();
-            if(data){
-                Object.values(data).forEach(m => {
-                    const isMe = m.u === currentUser;
-                    box.innerHTML += `
-                    <div class="flex gap-4 ${isMe ? 'flex-row-reverse' : ''} animate-fade">
-                        <div class="w-8 h-8 rounded-full bg-stone-800 border border-white/10 flex-shrink-0">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${m.u}" alt="AV">
-                        </div>
-                        <div class="max-w-xl p-4 ${isMe ? 'chat-bubble-me' : 'chat-bubble-other'}">
-                            <div class="flex justify-between gap-10 mb-1">
-                                <span class="text-[9px] font-black uppercase text-stone-500 tracking-tighter">${m.u}</span>
-                                <span class="text-[7px] text-stone-600 font-bold uppercase">${new Date(m.t).toLocaleTimeString()}</span>
-                            </div>
-                            <p class="text-xs leading-relaxed text-stone-200">${m.m}</p>
-                        </div>
-                    </div>`;
-                });
-                box.scrollTop = box.scrollHeight;
-            }
-        });
-
-        function loadPage(page) {
-            // Logique de changement de page si besoin
-            console.log("Loading " + page);
+        function initChat() {
+            db.ref('boardroom_chat').limitToLast(15).on('value', s => {
+                const box = document.getElementById('c-box');
+                if(!box) return;
+                box.innerHTML = "";
+                const data = s.val();
+                if(data) {
+                    Object.values(data).forEach(m => {
+                        const isMe = m.u === currentUser;
+                        box.innerHTML += `
+                            <div class="flex gap-4 ${isMe ? 'flex-row-reverse' : ''} animate-fade">
+                                <div class="w-8 h-8 rounded-full bg-stone-800 border border-white/10 flex-shrink-0 overflow-hidden">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${m.u}">
+                                </div>
+                                <div class="p-4 ${isMe ? 'chat-bubble-me' : 'chat-bubble-other'} max-w-[70%]">
+                                    <p class="text-[8px] font-black uppercase text-stone-500 mb-1">${m.u}</p>
+                                    <p class="text-xs text-stone-200">${m.m}</p>
+                                </div>
+                            </div>`;
+                    });
+                    box.scrollTop = box.scrollHeight;
+                }
+            });
         }
+
+        // Lancement initial sur le chat
+        switchTab('chat');
     </script>
 </body>
 </html>
