@@ -11,126 +11,144 @@
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         
         :root {
-            --bordo-primary: #B22222;
-            --bordo-light: #E53935;
+            --bordo: #B22222;
             --bg-dark: #050505;
+            --glass: rgba(18, 18, 18, 0.75);
         }
 
         body { 
             background-color: var(--bg-dark); 
             color: #f4f4f5; 
             font-family: 'Plus Jakarta Sans', sans-serif;
-            letter-spacing: -0.02em;
+            overflow: hidden;
         }
 
-        .glass-panel {
-            background: rgba(18, 18, 18, 0.7);
+        .glass {
+            background: var(--glass);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
         }
 
         .sidebar-item {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 12px;
-            margin: 4px 12px;
         }
 
         .sidebar-item:hover, .sidebar-item.active {
-            background: rgba(178, 34, 34, 0.1);
+            background: rgba(178, 34, 34, 0.15);
             color: white;
+            border-left: 4px solid var(--bordo);
         }
 
-        .sidebar-item.active {
-            border-left: 4px solid var(--bordo-primary);
+        .card-executive {
+            background: linear-gradient(145deg, #0f0f0f 0%, #050505 100%);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 2rem;
+            transition: 0.3s;
         }
 
-        .stat-card {
-            background: linear-gradient(145deg, rgba(20,20,20,1) 0%, rgba(10,10,10,1) 100%);
-            border: 1px solid rgba(255,255,255,0.03);
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
+        .card-executive:hover {
+            border-color: var(--bordo);
             transform: translateY(-5px);
-            border-color: rgba(178, 34, 34, 0.3);
         }
 
-        .bordo-gradient {
-            background: linear-gradient(135deg, var(--bordo-primary), #7A1B1B);
+        .input-executive {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
         }
 
-        /* Scrollbar personnalisée style moderne */
-        ::-webkit-scrollbar { width: 5px; }
+        .input-executive:focus {
+            border-color: var(--bordo);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-bordo {
+            background: linear-gradient(135deg, #B22222, #7A1B1B);
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+
+        .btn-bordo:hover {
+            box-shadow: 0 10px 20px rgba(178, 34, 34, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--bordo-primary); }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade { animation: fadeIn 0.5s ease-out forwards; }
+        ::-webkit-scrollbar-thumb { background: var(--bordo); border-radius: 10px; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden">
+<body class="flex h-screen">
 
-    <aside class="w-72 flex flex-col border-r border-white/5 py-8">
-        <div class="px-8 mb-12 flex items-center gap-3">
-            <div class="w-10 h-10 bordo-gradient rounded-xl flex items-center justify-center shadow-lg shadow-red-900/20">
-                <span class="font-black italic text-white text-xl">V</span>
+    <!-- SIDEBAR -->
+    <aside class="w-80 flex flex-col border-r border-white/5 bg-black py-8">
+        <div class="px-8 mb-12 flex items-center gap-4">
+            <div class="w-12 h-12 bg-[#B22222] rounded-2xl flex items-center justify-center shadow-2xl shadow-red-900/40">
+                <span class="text-2xl font-black italic">V</span>
             </div>
             <div>
-                <h1 class="text-sm font-extrabold tracking-tight">VIBZ COMMAND</h1>
-                <p class="text-[9px] text-stone-500 uppercase font-bold tracking-widest">Enterprise Edition</p>
+                <h1 class="text-lg font-black tracking-tighter">VIBZ COMMAND</h1>
+                <p class="text-[9px] text-stone-500 font-bold uppercase tracking-[0.2em]">Enterprise Hub</p>
             </div>
         </div>
 
-        <nav class="flex-grow space-y-1">
-            <div class="sidebar-item active p-4 cursor-pointer flex items-center gap-4 text-stone-400" onclick="loadModule('dash')">
-                <span class="text-lg">📊</span> <span class="text-sm font-semibold">Vue d'ensemble</span>
+        <nav class="flex-grow space-y-2 px-4">
+            <div class="sidebar-item active p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('dash')">
+                <span class="text-xl">🏛️</span> <span class="text-sm font-bold uppercase tracking-wide">Vue Stratégique</span>
             </div>
-            <div class="sidebar-item p-4 cursor-pointer flex items-center gap-4 text-stone-400" onclick="loadModule('tasks')">
-                <span class="text-lg">🎯</span> <span class="text-sm font-semibold">Missions Équipe</span>
+            <div class="sidebar-item p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('staff')">
+                <span class="text-xl">👥</span> <span class="text-sm font-bold uppercase tracking-wide">Gestion Staff</span>
             </div>
-            <div class="sidebar-item p-4 cursor-pointer flex items-center gap-4 text-stone-400" onclick="loadModule('chat')">
-                <span class="text-lg">💬</span> <span class="text-sm font-semibold">Salle de Réunion</span>
+            <div class="sidebar-item p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('finance')">
+                <span class="text-xl">📊</span> <span class="text-sm font-bold uppercase tracking-wide">Trésorerie / RH</span>
             </div>
-            <div class="sidebar-item p-4 cursor-pointer flex items-center gap-4 text-stone-400" onclick="loadModule('finance')">
-                <span class="text-lg">💳</span> <span class="text-sm font-semibold">Finances & RH</span>
+            <div class="sidebar-item p-4 cursor-pointer flex items-center gap-4" onclick="loadModule('chat')">
+                <span class="text-xl">💬</span> <span class="text-sm font-bold uppercase tracking-wide">Boardroom Chat</span>
             </div>
         </nav>
 
-        <div class="mx-6 p-4 glass-panel mt-auto">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-stone-800 border border-white/10 overflow-hidden">
-                    <img src="https://ui-avatars.com/api/?name=Christian+Bonsah&background=B22222&color=fff" alt="User">
-                </div>
-                <div class="overflow-hidden">
-                    <p class="text-[11px] font-bold truncate">C. BONSAH</p>
-                    <p class="text-[9px] text-red-500 font-bold uppercase">CEO & Admin</p>
+        <div class="mt-auto px-6">
+            <div class="card-executive !p-4 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bordo-gradient flex items-center justify-center font-bold border border-white/10 bg-zinc-900">CB</div>
+                <div>
+                    <p class="text-xs font-black uppercase">C. BONSAH</p>
+                    <p class="text-[9px] text-red-500 font-black uppercase">CEO & Founder</p>
                 </div>
             </div>
         </div>
     </aside>
 
-    <main class="flex-grow flex flex-col bg-[#020202]">
-        <header class="h-24 px-12 flex items-center justify-between">
-            <h2 id="module-title" class="text-2xl font-extrabold italic">Dashboard Global</h2>
-            <div class="flex items-center gap-4">
-                <div class="bg-stone-900/50 px-4 py-2 rounded-full border border-white/5 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
-                    Status: <span class="text-green-500">Live</span>
+    <!-- MAIN VIEW -->
+    <main class="flex-grow flex flex-col overflow-hidden">
+        <header class="h-24 px-12 flex items-center justify-between border-b border-white/5 bg-black/50 backdrop-blur-xl">
+            <h2 id="module-title" class="text-2xl font-black italic uppercase tracking-tighter">Tableau de Bord</h2>
+            <div class="flex items-center gap-6">
+                <div class="text-right">
+                    <p id="clock" class="text-sm font-bold">--:--</p>
+                    <p class="text-[9px] text-stone-500 font-bold uppercase">Lomé, Togo</p>
                 </div>
-                <button class="w-10 h-10 rounded-full border border-white/5 flex items-center justify-center hover:bg-white/5 transition">🔔</button>
+                <button class="btn-bordo px-4 py-2 text-[10px]">Paramètres</button>
             </div>
         </header>
 
-        <section id="main-view" class="flex-grow px-12 pb-12 overflow-y-auto animate-fade">
-            </section>
+        <div id="content-area" class="flex-grow p-12 overflow-y-auto bg-gradient-to-br from-[#050505] to-[#0a0a0a]">
+            <!-- Dynamic Content -->
+        </div>
     </main>
 
     <script>
-        // Config Firebase (Identique à ton site public pour la synchronisation)
+        // CONFIG FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyCaKG3bQcenE4yyGPzHoUEwr9lJ6OAssXQ",
             authDomain: "vibz-lab.firebaseapp.com",
@@ -144,121 +162,138 @@
         const db = firebase.database();
 
         function loadModule(name) {
-            const view = document.getElementById('main-view');
+            const area = document.getElementById('content-area');
             const title = document.getElementById('module-title');
             
             document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            if(event) event.currentTarget.classList.add('active');
 
             if(name === 'dash') {
-                title.innerText = "Dashboard Global";
-                view.innerHTML = `
+                title.innerText = "Vue Stratégique";
+                area.innerHTML = `
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                        <div class="stat-card p-8 rounded-3xl">
-                            <p class="text-stone-500 text-[10px] font-bold uppercase tracking-widest mb-4">Trésorerie Disponible</p>
-                            <h3 class="text-3xl font-black italic">--- <span class="text-xs text-stone-600">FCFA</span></h3>
-                        </div>
-                        <div class="stat-card p-8 rounded-3xl border-b-4 border-red-800">
-                            <p class="text-stone-500 text-[10px] font-bold uppercase tracking-widest mb-4">Candidatures Tournée</p>
-                            <h3 id="dash-tournee-count" class="text-3xl font-black italic">0</h3>
-                        </div>
-                        <div class="stat-card p-8 rounded-3xl">
-                            <p class="text-stone-500 text-[10px] font-bold uppercase tracking-widest mb-4">Projets en Production</p>
-                            <h3 class="text-3xl font-black italic">14</h3>
-                        </div>
-                    </div>
-                    <div class="glass-panel p-8">
-                        <h4 class="text-sm font-bold uppercase mb-6 text-stone-400 tracking-widest italic underline decoration-red-800">Derniers Événements</h4>
-                        <div id="activity-log" class="space-y-4">
-                            <p class="text-xs text-stone-600">Chargement des données en temps réel...</p>
-                        </div>
+                        <div class="card-executive"><p class="text-[10px] uppercase font-bold text-stone-500 mb-4">Capital VIBZ</p><h3 class="text-4xl font-black italic">--- <span class="text-sm">FCFA</span></h3></div>
+                        <div class="card-executive border-b-4 border-red-800"><p class="text-[10px] uppercase font-bold text-stone-500 mb-4">Candidats Tournée</p><h3 id="count-tournee" class="text-4xl font-black italic">...</h3></div>
+                        <div class="card-executive"><p class="text-[10px] uppercase font-bold text-stone-500 mb-4">Missions en cours</p><h3 class="text-4xl font-black italic">07</h3></div>
                     </div>
                 `;
-                // Récupération dynamique
                 db.ref('registrations_tournee').on('value', s => {
-                    document.getElementById('dash-tournee-count').innerText = s.val() ? Object.keys(s.val()).length : 0;
+                    document.getElementById('count-tournee').innerText = s.val() ? Object.keys(s.val()).length : 0;
                 });
             }
 
+            if(name === 'staff') {
+                title.innerText = "Gestion du Personnel";
+                area.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="card-executive">
+                            <h4 class="text-xs font-black uppercase mb-8 text-red-600 tracking-[0.2em]">Outils par Poste</h4>
+                            <div class="space-y-4">
+                                <details class="group bg-white/5 p-4 rounded-xl cursor-pointer">
+                                    <summary class="font-bold text-sm list-none flex justify-between uppercase">Assistante Exécutive <span>+</span></summary>
+                                    <div class="mt-4 grid grid-cols-2 gap-2">
+                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">Planning Studio</button>
+                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">Facturation</button>
+                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">Base Clients</button>
+                                    </div>
+                                </details>
+                                <details class="group bg-white/5 p-4 rounded-xl cursor-pointer">
+                                    <summary class="font-bold text-sm list-none flex justify-between uppercase">Technique / Montage <span>+</span></summary>
+                                    <div class="mt-4 grid grid-cols-2 gap-2">
+                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">État Matériel</button>
+                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">Serveur NAS</button>
+                                        <button class="input-executive text-[10px] uppercase font-bold hover:bg-red-900/20">Rendus Vidéo</button>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                        <div class="card-executive border-l-4 border-red-800">
+                            <h4 class="text-xs font-black uppercase mb-8 text-stone-500 tracking-[0.2em]">Édition du Staff (Modifiable)</h4>
+                            <div class="space-y-3">
+                                <input type="text" placeholder="Nom de l'employé" class="w-full input-executive">
+                                <select class="w-full input-executive bg-black">
+                                    <option>Choisir le Poste</option>
+                                    <option>Logistique</option>
+                                    <option>Montage</option>
+                                    <option>Artiste</option>
+                                </select>
+                                <button class="btn-bordo w-full py-4 text-xs">Mettre à jour le Personnel</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if(name === 'finance') {
+                title.innerText = "Trésorerie & RH";
+                area.innerHTML = `
+                    <div class="card-executive mb-8">
+                        <div class="flex justify-between items-center mb-8">
+                            <h4 class="text-xs font-black uppercase text-stone-500 tracking-[0.2em]">Mouvements de Caisse</h4>
+                            <button class="btn-bordo px-6 py-2 text-[10px]">Nouvelle Entrée</button>
+                        </div>
+                        <table class="w-full text-left text-sm">
+                            <thead class="text-red-700 font-black uppercase text-[10px] border-b border-white/5">
+                                <tr><th class="py-4">Libellé</th><th>Montant</th><th>Status</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody class="text-stone-400">
+                                <tr class="border-b border-white/5"><td class="py-4">Tournée - Étape Kara</td><td>850.000 F</td><td><span class="text-green-500">Réglé</span></td><td><button class="text-red-500 text-[10px] uppercase font-bold">Éditer</button></td></tr>
+                                <tr class="border-b border-white/5"><td class="py-4">Maintenance Studio</td><td>45.000 F</td><td><span class="text-orange-500">En cours</span></td><td><button class="text-red-500 text-[10px] uppercase font-bold">Éditer</button></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
             if(name === 'chat') {
-                title.innerText = "Salle de Réunion";
-                view.innerHTML = `
-                    <div class="flex flex-col h-full glass-panel overflow-hidden">
-                        <div id="chat-box" class="flex-grow p-8 overflow-y-auto space-y-4 bg-stone-900/10"></div>
-                        <div class="p-6 border-t border-white/5 flex gap-4 bg-stone-900/30">
-                            <input type="text" id="chat-input" placeholder="Note pour l'équipe..." class="flex-grow bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-red-800 transition text-sm">
-                            <button onclick="sendMessage()" class="bordo-gradient px-8 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-red-900/20">Envoyer</button>
+                title.innerText = "Executive Chatroom";
+                area.innerHTML = `
+                    <div class="flex flex-col h-[65vh] glass rounded-3xl overflow-hidden">
+                        <div id="chat-stream" class="flex-grow p-8 space-y-4 overflow-y-auto"></div>
+                        <div class="p-6 border-t border-white/5 flex gap-4 bg-black/50">
+                            <input type="text" id="chat-msg" placeholder="Message interne..." class="flex-grow input-executive">
+                            <button onclick="send()" class="btn-bordo px-10">Envoyer</button>
                         </div>
                     </div>
                 `;
                 loadChat();
             }
-
-            if(name === 'tasks') {
-                title.innerText = "Missions de l'Équipe";
-                view.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
-                        <div class="glass-panel p-8">
-                            <h4 class="font-black uppercase text-xs mb-8 text-stone-500">Missions Actives</h4>
-                            <div id="task-list" class="space-y-4">
-                                <div class="p-4 bg-white/5 rounded-xl border-l-4 border-blue-500">
-                                    <p class="text-[9px] font-bold text-blue-400 uppercase mb-1">Technique</p>
-                                    <p class="text-sm font-bold">Préparation matériel Kara</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="glass-panel p-8 bg-gradient-to-t from-red-900/5 to-transparent">
-                            <h4 class="font-black uppercase text-xs mb-8 text-stone-500 italic">Assigner une Mission</h4>
-                            <div class="space-y-4">
-                                <input type="text" id="task-title" placeholder="Titre de la mission..." class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm outline-none focus:border-red-800">
-                                <select id="task-user" class="w-full bg-stone-900 border border-white/10 rounded-xl p-4 text-sm outline-none">
-                                    <option>Choisir un membre</option>
-                                    <option>Assistante</option>
-                                    <option>Technicien</option>
-                                    <option>Monteur</option>
-                                </select>
-                                <button class="w-full bordo-gradient py-4 rounded-xl font-black uppercase text-[10px] tracking-widest">Lancer la mission</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
         }
 
-        // --- MOTEUR CHAT TEMPS RÉEL ---
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            if(input.value.trim() === "") return;
-            db.ref('internal_chat').push({
-                user: "C. BONSAH",
-                msg: input.value,
-                time: Date.now()
-            });
+        function send() {
+            const input = document.getElementById('chat-msg');
+            if(!input.value) return;
+            db.ref('internal_chat').push({ user: "CEO", msg: input.value, timestamp: Date.now() });
             input.value = "";
         }
 
         function loadChat() {
-            db.ref('internal_chat').limitToLast(20).on('value', s => {
-                const box = document.getElementById('chat-box');
-                box.innerHTML = "";
-                const data = s.val();
-                if(data) {
-                    Object.values(data).forEach(m => {
-                        const isMe = m.user === "C. BONSAH";
-                        box.innerHTML += `
+            db.ref('internal_chat').limitToLast(30).on('value', s => {
+                const stream = document.getElementById('chat-stream');
+                stream.innerHTML = "";
+                if(s.val()) {
+                    Object.values(s.val()).forEach(m => {
+                        const isMe = m.user === "CEO";
+                        stream.innerHTML += `
                             <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
                                 <span class="text-[8px] font-black uppercase text-stone-500 mb-1">${m.user}</span>
-                                <div class="px-4 py-3 rounded-2xl text-xs max-w-sm ${isMe ? 'bg-red-900/20 border border-red-900/30 text-white italic' : 'bg-stone-800 text-stone-300'}">
+                                <div class="px-4 py-3 rounded-2xl text-xs ${isMe ? 'bg-red-900/30 text-white border border-red-900/50 italic' : 'bg-zinc-800 text-stone-300'} max-w-md">
                                     ${m.msg}
                                 </div>
-                            </div>`;
+                            </div>
+                        `;
                     });
-                    box.scrollTop = box.scrollHeight;
+                    stream.scrollTop = stream.scrollHeight;
                 }
             });
         }
 
-        // Init au chargement
+        // Horloge
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'});
+        }, 1000);
+
         loadModule('dash');
     </script>
 </body>
